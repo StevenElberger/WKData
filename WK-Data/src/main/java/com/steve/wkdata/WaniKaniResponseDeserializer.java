@@ -32,6 +32,10 @@ public class WaniKaniResponseDeserializer extends JsonDeserializer<WaniKaniRespo
       String studyQueueJSON = mapper.writeValueAsString(node);
       StudyQueue studyQueue = mapper.readValue(studyQueueJSON, StudyQueue.class);
       response = new WaniKaniResponse(userInformation, studyQueue);  
+    } else if (node.has("radicals_progress")) {
+      String levelProgressionJSON = mapper.writeValueAsString(node);
+      LevelProgression levelProgression = mapper.readValue(levelProgressionJSON, LevelProgression.class);
+      response = new WaniKaniResponse(userInformation, levelProgression);
     } else {
       response = new WaniKaniResponse(userInformation);
     }

@@ -58,15 +58,14 @@ public class UserInformation {
    * The user's account creation date.
    */
   @JsonProperty("creation_date")
-  private int creationDate;
+  private long creationDate;
   /**
    * The time from which the user has been on vacation status.
    */
   @JsonProperty("vacation_date")
-  private int vacationDate;
+  private long vacationDate;
 
   /**
-   * Gets the user's username.
    * @return the username
    */
   public String getUsername() {
@@ -74,7 +73,6 @@ public class UserInformation {
   }
 
   /**
-   * Gets the gravatar ID.
    * @return the gravatar ID
    */
   public String getGravatar() {
@@ -82,7 +80,6 @@ public class UserInformation {
   }
 
   /**
-   * Gets the user's level.
    * @return the user's level
    */
   public int getLevel() {
@@ -90,15 +87,13 @@ public class UserInformation {
   }
 
   /**
-   * Gets the title of the user's section.
-   * @return the title
+   * @return the title of the user's section
    */
   public String getTitle() {
     return title;
   }
 
   /**
-   * Gets the user's about string.
    * @return the about string
    */
   public String getAbout() {
@@ -106,7 +101,6 @@ public class UserInformation {
   }
 
   /**
-   * Gets the user's website URL.
    * @return the website URL
    */
   public String getWebsite() {
@@ -114,7 +108,6 @@ public class UserInformation {
   }
 
   /**
-   * Gets the user's Twitter username.
    * @return the twitter username
    */
   public String getTwitter() {
@@ -122,7 +115,6 @@ public class UserInformation {
   }
 
   /**
-   * Gets the number of forum topics created.
    * @return the number of forum topics created
    */
   public int getTopicsCount() {
@@ -130,7 +122,6 @@ public class UserInformation {
   }
 
   /**
-   * Gets the number of forum posts created.
    * @return the number of forum posts created
    */
   public int getPostsCount() {
@@ -138,18 +129,16 @@ public class UserInformation {
   }
 
   /**
-   * Gets the Unix timestamp of the account creation date.
    * @return the account creation date (unix timestamp)
    */
-  public int getCreationDate() {
+  public long getCreationDate() {
     return creationDate;
   }
 
   /**
-   * Gets the Unix timestamp of the time the user set their status to vacation.
    * @return the vacation start date (Unix timestamp)
    */
-  public int getVacationDate() {
+  public long getVacationDate() {
     return vacationDate;
   }
 }

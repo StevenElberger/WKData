@@ -33,22 +33,37 @@ public class StudyQueue {
   @JsonProperty("reviews_available_next_day")
   private int reviewsAvailableNextDay;
 
+  /**
+   * @return the number of lessons available
+   */
   public int getLessonsAvailable() {
     return lessonsAvailable;
   }
 
+  /**
+   * @return the number of lessons available
+   */
   public int getReviewsAvailable() {
     return reviewsAvailable;
   }
 
+  /**
+   * @return the timestamp of the next review date
+   */
   public long getNextReviewDate() {
     return nextReviewDate;
   }
 
+  /**
+   * @return the number of reviews available within the next hour
+   */
   public int getReviewsAvailableNextHour() {
     return reviewsAvailableNextHour;
   }
 
+  /**
+   * @return the number of reviews available within the next day
+   */
   public int getReviewsAvailableNextDay() {
     return reviewsAvailableNextDay;
   }

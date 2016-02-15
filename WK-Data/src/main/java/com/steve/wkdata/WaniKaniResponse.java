@@ -21,6 +21,11 @@ public class WaniKaniResponse {
    */
   @JsonProperty("study_queue")
   private StudyQueue studyQueue;
+  /**
+   * An object containing the user's level progression.
+   */
+  @JsonProperty("level_progression")
+  private LevelProgression levelProgression;
 
   public WaniKaniResponse(UserInformation userInformation) {
       this.userInformation = userInformation;
@@ -31,8 +36,12 @@ public class WaniKaniResponse {
       this.studyQueue = studyQueue;
   }
 
+  public WaniKaniResponse(UserInformation userInformation, LevelProgression levelProgression) {
+      this.userInformation = userInformation;
+      this.levelProgression = levelProgression;
+  }
+
   /**
-   * Gets the user information object.
    * @return the user information object
    */
   public UserInformation getUserInformation() {
@@ -40,10 +49,16 @@ public class WaniKaniResponse {
   }
 
   /**
-   * Gets the user's study queue.
    * @return the user's study queue
    */
   public StudyQueue getStudyQueue() {
       return studyQueue;
+  }
+
+  /**
+   * @return the user's level progression
+   */
+  public LevelProgression getLevelProgression() {
+      return levelProgression;
   }
 }

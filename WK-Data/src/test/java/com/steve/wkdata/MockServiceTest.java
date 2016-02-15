@@ -42,4 +42,19 @@ public class MockServiceTest {
     assertNotNull(studyQueue);
     assertEquals(studyQueue.getReviewsAvailable(), 136);
   }
+
+  @Test
+  public void getLevelProgression_serializes() throws JsonParseException, JsonMappingException,
+                                                                                      IOException {
+    // SET UP
+    ObjectMapper mapper = new ObjectMapper();
+    WaniKaniResponse wkr = mapper.readValue(MockService.getLevelProgression(), WaniKaniResponse.class);
+
+    // ACT
+    LevelProgression levelProgression = wkr.getLevelProgression();
+
+    // ASSERT
+    assertNotNull(levelProgression);
+    assertEquals(levelProgression.getKanjiProgress(), 6);
+  }
 }
