@@ -6,6 +6,7 @@ import static org.junit.Assert.assertNotNull;
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+
 import org.junit.Test;
 
 import java.io.IOException;
@@ -56,5 +57,24 @@ public class MockServiceTest {
     // ASSERT
     assertNotNull(levelProgression);
     assertEquals(levelProgression.getKanjiProgress(), 6);
+  }
+
+  @Test
+  public void getSRSDistribution_serializes() throws JsonParseException, JsonMappingException,
+                                                                                      IOException {
+    //SET UP
+    ObjectMapper mapper = new ObjectMapper();
+    WaniKaniResponse wkr = mapper.readValue(MockService.getSRSDistribution(), WaniKaniResponse.class);
+
+    // ACT
+    SRSDistribution srsDistribution = wkr.getSRSDistribution();
+
+    // ASSERT
+    assertNotNull(srsDistribution);
+    assertNotNull(srsDistribution.getApprentice());
+    assertEquals(srsDistribution.getApprentice().getRadicals(), 1);
+    assertEquals(srsDistribution.getApprentice().getKanji(), 38);
+    assertEquals(srsDistribution.getApprentice().getVocabulary(), 117);
+    assertEquals(srsDistribution.getApprentice().getTotal(), 156);
   }
 }

@@ -26,19 +26,29 @@ public class WaniKaniResponse {
    */
   @JsonProperty("level_progression")
   private LevelProgression levelProgression;
+  /**
+   * An object containing the user's SRS distribution.
+   */
+  @JsonProperty("srs_distribution")
+  private SRSDistribution srsDistribution;
 
   public WaniKaniResponse(UserInformation userInformation) {
-      this.userInformation = userInformation;
+    this.userInformation = userInformation;
   }
 
   public WaniKaniResponse(UserInformation userInformation, StudyQueue studyQueue) {
-      this.userInformation = userInformation;
-      this.studyQueue = studyQueue;
+    this.userInformation = userInformation;
+    this.studyQueue = studyQueue;
   }
 
   public WaniKaniResponse(UserInformation userInformation, LevelProgression levelProgression) {
-      this.userInformation = userInformation;
-      this.levelProgression = levelProgression;
+    this.userInformation = userInformation;
+    this.levelProgression = levelProgression;
+  }
+
+  public WaniKaniResponse(UserInformation userInformation, SRSDistribution srsDistribution) {
+    this.userInformation = userInformation;
+    this.srsDistribution = srsDistribution;
   }
 
   /**
@@ -52,13 +62,20 @@ public class WaniKaniResponse {
    * @return the user's study queue
    */
   public StudyQueue getStudyQueue() {
-      return studyQueue;
+    return studyQueue;
   }
 
   /**
    * @return the user's level progression
    */
   public LevelProgression getLevelProgression() {
-      return levelProgression;
+    return levelProgression;
+  }
+
+  /**
+   * @return the user's SRS distribution
+   */
+  public SRSDistribution getSRSDistribution() {
+    return srsDistribution;
   }
 }
