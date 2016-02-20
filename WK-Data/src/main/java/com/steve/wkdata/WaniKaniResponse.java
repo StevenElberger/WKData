@@ -3,6 +3,11 @@ package com.steve.wkdata;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
+import okhttp3.HttpUrl;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
+
 /**
  * A representation of a response from the WaniKani API.
  * Will always contain 'user_information', 'requested_information' may be null.
@@ -11,6 +16,46 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
  */
 @JsonDeserialize(using = WaniKaniResponseDeserializer.class)
 public class WaniKaniResponse {
+  /**
+   * The URL to request user's user information.
+   */
+  private HttpUrl userInformationURL;
+  /**
+   * The URL to request the user's study queue.
+   */
+  private HttpUrl studyQueueURL;
+  /**
+   * The URL to request the user's level progression.
+   */
+  private HttpUrl levelProgressionURL;
+  /**
+   * The URL to request the user's SRS distribution.
+   */
+  private HttpUrl srsDistributionURL;
+  /**
+   * A request for the user's user information.
+   */
+  private Request userInformationRequest;
+  /**
+   * A request for the user's study queue.
+   */
+  private Request studyQueueRequest;
+  /**
+   * A request for the user's level progression.
+   */
+  private Request levelProgressionRequest;
+  /**
+   * A request for the user's SRS distribution.
+   */
+  private Request srsDistributionRequest;
+  /**
+   * The client to handle the calls.
+   */
+  private OkHttpClient client;
+  /**
+   * A generic response object for all calls.
+   */
+  private Response response;
   /**
    * An array to hold the timestamps of the last time
    * each object was refreshed (data caching purposes).
@@ -41,6 +86,58 @@ public class WaniKaniResponse {
   @JsonProperty("srs_distribution")
   private SRSDistribution srsDistribution;
 
+  /**
+   * Going to be the true constructor soon.
+   * @param key the API key for this user
+   */
+  public WaniKaniResponse(String key) {
+    this.key = key;
+    userInformationURL = new HttpUrl.Builder()
+            .scheme("https")
+            .host("www.wanikani.com")
+            .addPathSegment("api")
+            .addPathSegment("user")
+            .addPathSegment(key)
+            .build();
+    studyQueueURL = new HttpUrl.Builder()
+            .scheme("https")
+            .host("www.wanikani.com")
+            .addPathSegment("api")
+            .addPathSegment("user")
+            .addPathSegment(key)
+            .addPathSegment("study-queue")
+            .build();
+    levelProgressionURL = new HttpUrl.Builder()
+            .scheme("https")
+            .host("www.wanikani.com")
+            .addPathSegment("api")
+            .addPathSegment("user")
+            .addPathSegment(key)
+            .addPathSegment("level-progression")
+            .build();
+    srsDistributionURL = new HttpUrl.Builder()
+            .scheme("https")
+            .host("www.wanikani.com")
+            .addPathSegment("api")
+            .addPathSegment("user")
+            .addPathSegment(key)
+            .addPathSegment("srs-distribution")
+            .build();
+    userInformationRequest = new Request.Builder()
+            .url(userInformationURL)
+            .build();
+    studyQueueRequest = new Request.Builder()
+            .url(studyQueueURL)
+            .build();
+    levelProgressionRequest = new Request.Builder()
+            .url(levelProgressionURL)
+            .build();
+    srsDistributionRequest = new Request.Builder()
+            .url(srsDistributionURL)
+            .build();
+    client = new OkHttpClient();
+  }
+
   public WaniKaniResponse(UserInformation userInformation) {
     this.userInformation = userInformation;
   }
@@ -60,20 +157,8 @@ public class WaniKaniResponse {
     this.srsDistribution = srsDistribution;
   }
 
-  public long[] getCallTimestamps() {
-    return callTimestamps;
-  }
-
-  public void setCallTimestamps(long[] callTimestamps) {
-    this.callTimestamps = callTimestamps;
-  }
-
   public String getKey() {
     return key;
-  }
-
-  public void setKey(String key) {
-    this.key = key;
   }
 
   public UserInformation getUserInformation() {
