@@ -1,11 +1,13 @@
 package com.steve.wkdata;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
 /**
  * A representation of a study queue object.
  * @author Steve
  */
+@JsonDeserialize(using = StudyQueueDeserializer.class)
 public class StudyQueue {
   /**
    * The number of lessons currently available.
@@ -32,6 +34,15 @@ public class StudyQueue {
    */
   @JsonProperty("reviews_available_next_day")
   private int reviewsAvailableNextDay;
+
+  public StudyQueue(int lessonsAvailable, int reviewsAvailable, long nextReviewDate, 
+                          int reviewsAvailableNextHour, int reviewsAvailableNextDay) {
+    this.lessonsAvailable = lessonsAvailable;
+    this.reviewsAvailable = reviewsAvailable;
+    this.nextReviewDate = nextReviewDate;
+    this.reviewsAvailableNextHour = reviewsAvailableNextHour;
+    this.reviewsAvailableNextDay = reviewsAvailableNextDay;
+  }
 
   /**
    * @return the number of lessons available

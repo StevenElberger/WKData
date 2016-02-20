@@ -1,12 +1,14 @@
 package com.steve.wkdata;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
 /**
  * A representation of WK's user_information object.
  * 
  * @author Steve
  */
+@JsonDeserialize(using = UserInformationDeserializer.class)
 public class UserInformation {
 
   /**
@@ -65,6 +67,22 @@ public class UserInformation {
   @JsonProperty("vacation_date")
   private Long vacationDate;
 
+  public UserInformation(String username, String gravatar, int level,
+                          String title, String about, String website,
+                          String twitter, int topicsCount, int postsCount,
+                          long creationDate, Long vacationDate) {
+    this.username = username;
+    this.gravatar = gravatar;
+    this.level = level;
+    this.title = title;
+    this.about = about;
+    this.website = website;
+    this.twitter = twitter;
+    this.topicsCount = topicsCount;
+    this.postsCount = postsCount;
+    this.creationDate = creationDate;
+    this.vacationDate = vacationDate;
+  }
   /**
    * @return the username
    */

@@ -1,11 +1,13 @@
 package com.steve.wkdata;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
 /**
  * A representation of the user's level progression.
  * @author Steve
  */
+@JsonDeserialize(using = LevelProgressionDeserializer.class)
 public class LevelProgression {
   /**
    * The user's progress through the current level's radicals.
@@ -27,6 +29,14 @@ public class LevelProgression {
    */
   @JsonProperty("kanji_total")
   private int kanjiTotal;
+
+  public LevelProgression(int radicalsProgress, int radicalsTotal, 
+                              int kanjiProgress, int kanjiTotal) {
+    this.radicalsProgress = radicalsProgress;
+    this.radicalsTotal = radicalsTotal;
+    this.kanjiProgress = kanjiProgress;
+    this.kanjiTotal = kanjiTotal;
+  }
 
   /**
    * @return the radicalsProgress

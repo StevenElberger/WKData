@@ -1,7 +1,9 @@
 package com.steve.wkdata;
 
+import java.io.IOException;
+
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import okhttp3.HttpUrl;
 import okhttp3.OkHttpClient;
@@ -14,8 +16,8 @@ import okhttp3.Response;
  * May also contain an error object instead.
  * @author Steve
  */
-@JsonDeserialize(using = WaniKaniResponseDeserializer.class)
-public class WaniKaniResponse {
+public class WaniKaniUser {
+  private static final long THIRTY_MINUTES = 30 * 60 * 1000;
   /**
    * The URL to request user's user information.
    */
@@ -90,7 +92,7 @@ public class WaniKaniResponse {
    * Going to be the true constructor soon.
    * @param key the API key for this user
    */
-  public WaniKaniResponse(String key) {
+  public WaniKaniUser(String key) {
     this.key = key;
     userInformationURL = new HttpUrl.Builder()
             .scheme("https")
@@ -138,58 +140,63 @@ public class WaniKaniResponse {
     client = new OkHttpClient();
   }
 
-  public WaniKaniResponse(UserInformation userInformation) {
-    this.userInformation = userInformation;
-  }
-
-  public WaniKaniResponse(UserInformation userInformation, StudyQueue studyQueue) {
-    this.userInformation = userInformation;
-    this.studyQueue = studyQueue;
-  }
-
-  public WaniKaniResponse(UserInformation userInformation, LevelProgression levelProgression) {
-    this.userInformation = userInformation;
-    this.levelProgression = levelProgression;
-  }
-
-  public WaniKaniResponse(UserInformation userInformation, SRSDistribution srsDistribution) {
-    this.userInformation = userInformation;
-    this.srsDistribution = srsDistribution;
-  }
-
   public String getKey() {
     return key;
   }
 
-  public UserInformation getUserInformation() {
+  public long[] getCallTimestamps() {
+    return callTimestamps;
+  }
+
+  public UserInformation getUserInformation() throws IOException {
+    if (userInformation == null || (userInformation != null && 
+            System.currentTimeMillis() - THIRTY_MINUTES >= callTimestamps[0])) {
+      response = client.newCall(userInformationRequest).execute();
+      if (response.isSuccessful()) {
+        ObjectMapper mapper = new ObjectMapper();
+        userInformation = mapper.readValue(response.body().string(), UserInformation.class);
+        callTimestamps[0] = System.currentTimeMillis();
+      }
+    }
     return userInformation;
   }
 
-  public void setUserInformation(UserInformation userInformation) {
-    this.userInformation = userInformation;
-  }
-
-  public StudyQueue getStudyQueue() {
+  public StudyQueue getStudyQueue() throws IOException {
+    if (studyQueue == null || (studyQueue != null && 
+            System.currentTimeMillis() - THIRTY_MINUTES >= callTimestamps[1])) {
+      response = client.newCall(studyQueueRequest).execute();
+      if (response.isSuccessful()) {
+        ObjectMapper mapper = new ObjectMapper();
+        studyQueue = mapper.readValue(response.body().string(), StudyQueue.class);
+        callTimestamps[1] = System.currentTimeMillis();
+      }
+    }
     return studyQueue;
   }
 
-  public void setStudyQueue(StudyQueue studyQueue) {
-    this.studyQueue = studyQueue;
-  }
-
-  public LevelProgression getLevelProgression() {
+  public LevelProgression getLevelProgression() throws IOException {
+    if (levelProgression == null || (levelProgression != null && 
+            System.currentTimeMillis() - THIRTY_MINUTES >= callTimestamps[2])) {
+      response = client.newCall(levelProgressionRequest).execute();
+      if (response.isSuccessful()) {
+        ObjectMapper mapper = new ObjectMapper();
+        levelProgression = mapper.readValue(response.body().string(), LevelProgression.class);
+        callTimestamps[2] = System.currentTimeMillis();
+      }
+    }
     return levelProgression;
   }
 
-  public void setLevelProgression(LevelProgression levelProgression) {
-    this.levelProgression = levelProgression;
-  }
-
-  public SRSDistribution getSRSDistribution() {
+  public SRSDistribution getSRSDistribution() throws IOException {
+    if (srsDistribution == null || (srsDistribution != null && 
+            System.currentTimeMillis() - THIRTY_MINUTES >= callTimestamps[3])) {
+      response = client.newCall(srsDistributionRequest).execute();
+      if (response.isSuccessful()) {
+        ObjectMapper mapper = new ObjectMapper();
+        srsDistribution = mapper.readValue(response.body().string(), SRSDistribution.class);
+        callTimestamps[3] = System.currentTimeMillis();
+      }
+    }
     return srsDistribution;
-  }
-
-  public void setSRSDistribution(SRSDistribution srsDistribution) {
-    this.srsDistribution = srsDistribution;
   }
 }

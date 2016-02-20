@@ -1,0 +1,28 @@
+package com.steve.wkdata;
+
+import com.fasterxml.jackson.core.JsonParser;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.DeserializationContext;
+import com.fasterxml.jackson.databind.JsonDeserializer;
+import com.fasterxml.jackson.databind.JsonNode;
+
+import java.io.IOException;
+
+/**
+ * A custom deserializer for the StudyQueue class.
+ * @author Steve
+ */
+public class StudyQueueDeserializer extends JsonDeserializer<StudyQueue> {
+
+  @Override
+  public StudyQueue deserialize(JsonParser jp, DeserializationContext ctxt) throws IOException, JsonProcessingException {
+    JsonNode node = jp.getCodec().readTree(jp);
+    node = node.get("requested_information");
+    int lessonsAvailable = Integer.parseInt(node.get("lessons_available").asText());
+    int reviewsAvailable = Integer.parseInt(node.get("reviews_available").asText());
+    long nextReviewDate = Long.parseLong(node.get("next_review_date").asText());
+    int reviewsAvailableNextHour = Integer.parseInt(node.get("reviews_available_next_hour").asText());
+    int reviewsAvailableNextDay = Integer.parseInt(node.get("reviews_available_next_day").asText());
+    return new StudyQueue(lessonsAvailable, reviewsAvailable, nextReviewDate, reviewsAvailableNextHour, reviewsAvailableNextDay);
+  }
+}

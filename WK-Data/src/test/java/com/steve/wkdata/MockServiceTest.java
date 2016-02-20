@@ -18,8 +18,8 @@ public class MockServiceTest {
                                                                                       IOException {
     // SET UP
     ObjectMapper mapper = new ObjectMapper();
-    WaniKaniResponse wkr = mapper.readValue(MockService.getUserInformation(), 
-                                                        WaniKaniResponse.class);
+    WaniKaniUser wkr = mapper.readValue(MockService.getUserInformation(), 
+                                                        WaniKaniUser.class);
 
     // ACT
     UserInformation userInformation = wkr.getUserInformation();
@@ -34,7 +34,7 @@ public class MockServiceTest {
                                                                                       IOException {
     // SET UP
     ObjectMapper mapper = new ObjectMapper();
-    WaniKaniResponse wkr = mapper.readValue(MockService.getStudyQueue(), WaniKaniResponse.class);
+    WaniKaniUser wkr = mapper.readValue(MockService.getStudyQueue(), WaniKaniUser.class);
 
     // ACT
     StudyQueue studyQueue = wkr.getStudyQueue();
@@ -49,7 +49,7 @@ public class MockServiceTest {
                                                                                       IOException {
     // SET UP
     ObjectMapper mapper = new ObjectMapper();
-    WaniKaniResponse wkr = mapper.readValue(MockService.getLevelProgression(), WaniKaniResponse.class);
+    WaniKaniUser wkr = mapper.readValue(MockService.getLevelProgression(), WaniKaniUser.class);
 
     // ACT
     LevelProgression levelProgression = wkr.getLevelProgression();
@@ -64,7 +64,7 @@ public class MockServiceTest {
                                                                                       IOException {
     //SET UP
     ObjectMapper mapper = new ObjectMapper();
-    WaniKaniResponse wkr = mapper.readValue(MockService.getSRSDistribution(), WaniKaniResponse.class);
+    WaniKaniUser wkr = mapper.readValue(MockService.getSRSDistribution(), WaniKaniUser.class);
 
     // ACT
     SRSDistribution srsDistribution = wkr.getSRSDistribution();

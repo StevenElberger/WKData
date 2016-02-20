@@ -1,11 +1,13 @@
 package com.steve.wkdata;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
 /**
  * A representation of the user's SRS distribution.
  * @author Steve
  */
+@JsonDeserialize(using = SRSDistributionDeserializer.class)
 public class SRSDistribution {
   /**
    * The apprentice-level srs item.
@@ -32,6 +34,15 @@ public class SRSDistribution {
    */
   @JsonProperty("burned")
   private SRSItem burned;
+
+  public SRSDistribution(SRSItem apprentice, SRSItem guru, 
+          SRSItem master, SRSItem enlighten, SRSItem burned) {
+    this.apprentice = apprentice;
+    this.guru = guru;
+    this.master = master;
+    this.enlighten = enlighten;
+    this.burned = burned;
+  }
 
   /**
    * @return the apprentice
@@ -94,6 +105,12 @@ public class SRSDistribution {
     @JsonProperty("total")
     private int total;
 
+    public SRSItem(int radicals, int kanji, int vocabulary, int total) {
+      this.radicals = radicals;
+      this.kanji = kanji;
+      this.vocabulary = vocabulary;
+      this.total = total;
+    }
     /**
      * @return the radicals
      */
