@@ -63,7 +63,7 @@ public class UserInformation {
    * The time from which the user has been on vacation status.
    */
   @JsonProperty("vacation_date")
-  private long vacationDate;
+  private Long vacationDate;
 
   /**
    * @return the username
@@ -138,7 +138,7 @@ public class UserInformation {
   /**
    * @return the vacation start date (Unix timestamp)
    */
-  public long getVacationDate() {
+  public Long getVacationDate() {
     return vacationDate;
   }
 }

@@ -12,6 +12,15 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 @JsonDeserialize(using = WaniKaniResponseDeserializer.class)
 public class WaniKaniResponse {
   /**
+   * An array to hold the timestamps of the last time
+   * each object was refreshed (data caching purposes).
+   */
+  private long[] callTimestamps = {0, 0, 0, 0};
+  /**
+   * The user's API key.
+   */
+  private String key;
+  /**
    * An object containing the user's information.
    */
   @JsonProperty("user_information")
@@ -51,31 +60,51 @@ public class WaniKaniResponse {
     this.srsDistribution = srsDistribution;
   }
 
-  /**
-   * @return the user information object
-   */
+  public long[] getCallTimestamps() {
+    return callTimestamps;
+  }
+
+  public void setCallTimestamps(long[] callTimestamps) {
+    this.callTimestamps = callTimestamps;
+  }
+
+  public String getKey() {
+    return key;
+  }
+
+  public void setKey(String key) {
+    this.key = key;
+  }
+
   public UserInformation getUserInformation() {
     return userInformation;
   }
 
-  /**
-   * @return the user's study queue
-   */
+  public void setUserInformation(UserInformation userInformation) {
+    this.userInformation = userInformation;
+  }
+
   public StudyQueue getStudyQueue() {
     return studyQueue;
   }
 
-  /**
-   * @return the user's level progression
-   */
+  public void setStudyQueue(StudyQueue studyQueue) {
+    this.studyQueue = studyQueue;
+  }
+
   public LevelProgression getLevelProgression() {
     return levelProgression;
   }
 
-  /**
-   * @return the user's SRS distribution
-   */
+  public void setLevelProgression(LevelProgression levelProgression) {
+    this.levelProgression = levelProgression;
+  }
+
   public SRSDistribution getSRSDistribution() {
     return srsDistribution;
+  }
+
+  public void setSRSDistribution(SRSDistribution srsDistribution) {
+    this.srsDistribution = srsDistribution;
   }
 }
