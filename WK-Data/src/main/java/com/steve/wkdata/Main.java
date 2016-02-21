@@ -20,13 +20,10 @@ public class Main {
    */
   public static void printMenu() {
     System.out.println("\nCurrent options are:");
-    System.out.println("1) Get user information");
-    System.out.println("2) Display level progression");
-    System.out.println("3) Display SRS distribution");
-    System.out.println("4) Print user information");
-    System.out.println("5) Print level progression");
-    System.out.println("6) Print SRS distribution");
-    System.out.println("7) Quit\n");
+    System.out.println("1) Print user information");
+    System.out.println("2) Print level progression");
+    System.out.println("3) Print SRS distribution");
+    System.out.println("4) Quit\n");
   }
 
   /**
@@ -37,7 +34,7 @@ public class Main {
     Scanner scanner = new Scanner(System.in);
     System.out.println("Enter an API key: ");
     user = new WaniKaniUser(scanner.nextLine());
-    while (userInput != 7) {
+    while (userInput != 4) {
       printMenu();
       System.out.println("Please enter a selection: ");
       userInput = Integer.parseInt(scanner.nextLine());
@@ -47,52 +44,121 @@ public class Main {
   }
 
   public static void processAction(int userInput) {
+    switch (userInput) {
+    case 1:
+      printUserInformation();
+      break;
+    case 2:
+      printStudyQueue();
+      break;
+    case 3:
+      printLevelProgression();
+      break;
+    case 4:
+      printSRSDistribution();
+    default:
+      break;
+    }
+  }
+
+  public static void printUserInformation() {
+    long refreshTime = user.getCallTimestamps()[0];
+    UserInformation userInfo;
     try {
-      switch (userInput) {
-      case 1:
-        user.getUserInformation();
-        break;
-      case 2:
-        user.getLevelProgression();
-        break;
-      case 3:
-        user.getSRSDistribution();
-        break;
-      case 4:
-        if (user != null && user.getUserInformation() != null) {
-          long refreshTime = user.getCallTimestamps()[0];
-          UserInformation userInfo = user.getUserInformation();
-          System.out.println("Displaying user information:");
-          System.out.println("Last refreshed: " + new Date(refreshTime));
-          System.out.println("Username: " + userInfo.getUsername());
-          System.out.println("Gravatar: " + userInfo.getGravatar());
-          System.out.println("Level: " + userInfo.getLevel());
-          System.out.println("Title: " + userInfo.getTitle());
-          if (userInfo.getAbout().equals("")) {
-            System.out.println("About: \"\"");
-          } else {
-            System.out.println("About: " + userInfo.getAbout());
-          }
-          System.out.println("Website: " + userInfo.getWebsite());
-          System.out.println("Twitter: " + userInfo.getTwitter());
-          System.out.println("Number of Topics: " + userInfo.getTopicsCount());
-          System.out.println("Number of posts: " + userInfo.getPostsCount());
-          System.out.println("Creation date: " + new Date(userInfo.getCreationDate()));
-          if (userInfo.getVacationDate() == null) {
-            System.out.println("Vacation date: null");
-          } else {
-            System.out.println("Vacation date: " + new Date(userInfo.getVacationDate()));
-          }
-        } else {
-          System.out.println("No user information to display");
-        }
-        break;
-      case 5:
-        System.out.println("lol");
-        break;
+      userInfo = user.getUserInformation();
+      System.out.println("Displaying user information:");
+      System.out.println("Last refreshed: " + new Date(refreshTime));
+      System.out.println("Username: " + userInfo.getUsername());
+      System.out.println("Gravatar: " + userInfo.getGravatar());
+      System.out.println("Level: " + userInfo.getLevel());
+      System.out.println("Title: " + userInfo.getTitle());
+      if (userInfo.getAbout().equals("")) {
+        System.out.println("About: \"\"");
+      } else {
+        System.out.println("About: " + userInfo.getAbout());
+      }
+      System.out.println("Website: " + userInfo.getWebsite());
+      System.out.println("Twitter: " + userInfo.getTwitter());
+      System.out.println("Number of Topics: " + userInfo.getTopicsCount());
+      System.out.println("Number of posts: " + userInfo.getPostsCount());
+      System.out.println("Creation date: " + new Date(userInfo.getCreationDate()));
+      if (userInfo.getVacationDate() == null) {
+        System.out.println("Vacation date: null");
+      } else {
+        System.out.println("Vacation date: " + new Date(userInfo.getVacationDate()));
       }
     } catch (IOException e) {
-      e.printStackTrace();
+      System.out.println("Error getting user information");
+    }
+  }
+
+  public static void printStudyQueue() {
+    long refreshTime = user.getCallTimestamps()[1];
+    StudyQueue studyQueue;
+    try {
+        studyQueue = user.getStudyQueue();
+      System.out.println("Displaying level progression:");
+      System.out.println("Last refreshed: " + new Date(refreshTime));
+      System.out.println("Lessons available: " + studyQueue.getLessonsAvailable());
+      System.out.println("Reviews available: " + studyQueue.getReviewsAvailable());
+      System.out.println("Next review date: " + new Date(studyQueue.getNextReviewDate()));
+      System.out.println("Reviews available next hour: " + studyQueue.getReviewsAvailableNextHour());
+      System.out.println("Reviews available next day: " + studyQueue.getReviewsAvailableNextDay());
+    } catch (IOException e) {
+      System.out.println("Error getting study queue");
+    }
+  }
+
+  public static void printLevelProgression() {
+    long refreshTime = user.getCallTimestamps()[2];
+    LevelProgression levelProgression;
+    try {
+      levelProgression = user.getLevelProgression();
+      System.out.println("Displaying level progression:");
+      System.out.println("Last refreshed: " + new Date(refreshTime));
+      System.out.println("Radicals progress: " + levelProgression.getRadicalsProgress());
+      System.out.println("Radicals total: " + levelProgression.getRadicalsTotal());
+      System.out.println("Kanji progress: " + levelProgression.getKanjiProgress());
+      System.out.println("Kanji total: " + levelProgression.getKanjiTotal());
+    } catch (IOException e) {
+      System.out.println("Error getting level progression");
+    }
+  }
+
+  public static void printSRSDistribution() {
+    long refreshTime = user.getCallTimestamps()[3];
+    SRSDistribution srsDistribution;
+    try {
+      srsDistribution = user.getSRSDistribution();
+      System.out.println("Displaying level progression:");
+      System.out.println("Last refreshed: " + new Date(refreshTime));
+      System.out.println("Apprentice---");
+      System.out.println("Radicals: " + srsDistribution.getApprentice().getRadicals());
+      System.out.println("Kanji: " + srsDistribution.getApprentice().getKanji());
+      System.out.println("Vocabulary: " + srsDistribution.getApprentice().getVocabulary());
+      System.out.println("Total: " + srsDistribution.getApprentice().getTotal());
+      System.out.println("Guru---");
+      System.out.println("Radicals: " + srsDistribution.getGuru().getRadicals());
+      System.out.println("Kanji: " + srsDistribution.getGuru().getKanji());
+      System.out.println("Vocabulary: " + srsDistribution.getGuru().getVocabulary());
+      System.out.println("Total: " + srsDistribution.getGuru().getTotal());
+      System.out.println("Master---");
+      System.out.println("Radicals: " + srsDistribution.getMaster().getRadicals());
+      System.out.println("Kanji: " + srsDistribution.getMaster().getKanji());
+      System.out.println("Vocabulary: " + srsDistribution.getMaster().getVocabulary());
+      System.out.println("Total: " + srsDistribution.getMaster().getTotal());
+      System.out.println("Enlighten---");
+      System.out.println("Radicals: " + srsDistribution.getEnlighten().getRadicals());
+      System.out.println("Kanji: " + srsDistribution.getEnlighten().getKanji());
+      System.out.println("Vocabulary: " + srsDistribution.getEnlighten().getVocabulary());
+      System.out.println("Total: " + srsDistribution.getEnlighten().getTotal());
+      System.out.println("Burned---");
+      System.out.println("Radicals: " + srsDistribution.getBurned().getRadicals());
+      System.out.println("Kanji: " + srsDistribution.getBurned().getKanji());
+      System.out.println("Vocabulary: " + srsDistribution.getBurned().getVocabulary());
+      System.out.println("Total: " + srsDistribution.getBurned().getTotal());
+    } catch (IOException e) {
+      System.out.println("Error getting level progression");
     }
   }
 }

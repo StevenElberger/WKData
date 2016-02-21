@@ -35,48 +35,44 @@ public class SRSDistribution {
   @JsonProperty("burned")
   private SRSItem burned;
 
-  public SRSDistribution(SRSItem apprentice, SRSItem guru, 
-          SRSItem master, SRSItem enlighten, SRSItem burned) {
-    this.apprentice = apprentice;
-    this.guru = guru;
-    this.master = master;
-    this.enlighten = enlighten;
-    this.burned = burned;
-  }
-
-  /**
-   * @return the apprentice
-   */
   public SRSItem getApprentice() {
     return apprentice;
   }
 
-  /**
-   * @return the guru
-   */
+  public void setApprentice(SRSItem apprentice) {
+    this.apprentice = apprentice;
+  }
+
   public SRSItem getGuru() {
     return guru;
   }
 
-  /**
-   * @return the master
-   */
+  public void setGuru(SRSItem guru) {
+    this.guru = guru;
+  }
+
   public SRSItem getMaster() {
     return master;
   }
 
-  /**
-   * @return the enlighten
-   */
+  public void setMaster(SRSItem master) {
+    this.master = master;
+  }
+
   public SRSItem getEnlighten() {
     return enlighten;
   }
 
-  /**
-   * @return the burned
-   */
+  public void setEnlighten(SRSItem enlighten) {
+    this.enlighten = enlighten;
+  }
+
   public SRSItem getBurned() {
     return burned;
+  }
+
+  public void setBurned(SRSItem burned) {
+    this.burned = burned;
   }
 
 /**
@@ -111,30 +107,19 @@ public class SRSDistribution {
       this.vocabulary = vocabulary;
       this.total = total;
     }
-    /**
-     * @return the radicals
-     */
+
     public int getRadicals() {
         return radicals;
     }
 
-    /**
-     * @return the kanji
-     */
     public int getKanji() {
         return kanji;
     }
 
-    /**
-     * @return the vocabulary
-     */
     public int getVocabulary() {
         return vocabulary;
     }
 
-    /**
-     * @return the total
-     */
     public int getTotal() {
         return total;
     }
