@@ -21,9 +21,10 @@ public class StudyQueue {
   private int reviewsAvailable;
   /**
    * The time for when the next review will be available.
+   * May be {@code null}.
    */
   @JsonProperty("next_review_date")
-  private long nextReviewDate;
+  private Long nextReviewDate;
   /**
    * The number of reviews available within the next hour.
    */
@@ -35,6 +36,14 @@ public class StudyQueue {
   @JsonProperty("reviews_available_next_day")
   private int reviewsAvailableNextDay;
 
+  /**
+   * Constructor.
+   * @param lessonsAvailable the num of lessons available
+   * @param reviewsAvailable the num of reviews available
+   * @param nextReviewDate the next review date
+   * @param reviewsAvailableNextHour the num of reviews available in the next hour
+   * @param reviewsAvailableNextDay the num of reviews available in the next day
+   */
   public StudyQueue(int lessonsAvailable, int reviewsAvailable, long nextReviewDate, 
                           int reviewsAvailableNextHour, int reviewsAvailableNextDay) {
     this.lessonsAvailable = lessonsAvailable;
@@ -44,37 +53,22 @@ public class StudyQueue {
     this.reviewsAvailableNextDay = reviewsAvailableNextDay;
   }
 
-  /**
-   * @return the number of lessons available
-   */
   public int getLessonsAvailable() {
     return lessonsAvailable;
   }
 
-  /**
-   * @return the number of lessons available
-   */
   public int getReviewsAvailable() {
     return reviewsAvailable;
   }
 
-  /**
-   * @return the timestamp of the next review date
-   */
-  public long getNextReviewDate() {
+  public Long getNextReviewDate() {
     return nextReviewDate;
   }
 
-  /**
-   * @return the number of reviews available within the next hour
-   */
   public int getReviewsAvailableNextHour() {
     return reviewsAvailableNextHour;
   }
 
-  /**
-   * @return the number of reviews available within the next day
-   */
   public int getReviewsAvailableNextDay() {
     return reviewsAvailableNextDay;
   }

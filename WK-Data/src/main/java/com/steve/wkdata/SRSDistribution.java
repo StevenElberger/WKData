@@ -7,79 +7,79 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
  * A representation of the user's SRS distribution.
  * @author Steve
  */
-@JsonDeserialize(using = SRSDistributionDeserializer.class)
-public class SRSDistribution {
+@JsonDeserialize(using = SrsDistributionDeserializer.class)
+public class SrsDistribution {
   /**
    * The apprentice-level srs item.
    */
   @JsonProperty("apprentice")
-  private SRSItem apprentice;
+  private SrsItem apprentice;
   /**
    * The guru-level srs item.
    */
   @JsonProperty("guru")
-  private SRSItem guru;
+  private SrsItem guru;
   /**
    * The master-level srs item.
    */
   @JsonProperty("master")
-  private SRSItem master;
+  private SrsItem master;
   /**
    * The enlighten-level srs item.
    */
   @JsonProperty("enlighten")
-  private SRSItem enlighten;
+  private SrsItem enlighten;
   /**
-   * The burned-level srs item
+   * The burned-level srs item.
    */
   @JsonProperty("burned")
-  private SRSItem burned;
+  private SrsItem burned;
 
-  public SRSItem getApprentice() {
+  public SrsItem getApprentice() {
     return apprentice;
   }
 
-  public void setApprentice(SRSItem apprentice) {
+  public void setApprentice(SrsItem apprentice) {
     this.apprentice = apprentice;
   }
 
-  public SRSItem getGuru() {
+  public SrsItem getGuru() {
     return guru;
   }
 
-  public void setGuru(SRSItem guru) {
+  public void setGuru(SrsItem guru) {
     this.guru = guru;
   }
 
-  public SRSItem getMaster() {
+  public SrsItem getMaster() {
     return master;
   }
 
-  public void setMaster(SRSItem master) {
+  public void setMaster(SrsItem master) {
     this.master = master;
   }
 
-  public SRSItem getEnlighten() {
+  public SrsItem getEnlighten() {
     return enlighten;
   }
 
-  public void setEnlighten(SRSItem enlighten) {
+  public void setEnlighten(SrsItem enlighten) {
     this.enlighten = enlighten;
   }
 
-  public SRSItem getBurned() {
+  public SrsItem getBurned() {
     return burned;
   }
 
-  public void setBurned(SRSItem burned) {
+  public void setBurned(SrsItem burned) {
     this.burned = burned;
   }
 
-/**
+  /**
    * A representation of an SRS item.
    * @author Steve
    */
-  public class SRSItem {
+  public class SrsItem {
     /**
      * The number of radicals.
      */
@@ -101,7 +101,14 @@ public class SRSDistribution {
     @JsonProperty("total")
     private int total;
 
-    public SRSItem(int radicals, int kanji, int vocabulary, int total) {
+    /**
+     * Constructor.
+     * @param radicals the num of radicals
+     * @param kanji the num of kanji
+     * @param vocabulary the num of vocabulary
+     * @param total the num total
+     */
+    public SrsItem(int radicals, int kanji, int vocabulary, int total) {
       this.radicals = radicals;
       this.kanji = kanji;
       this.vocabulary = vocabulary;
@@ -109,19 +116,19 @@ public class SRSDistribution {
     }
 
     public int getRadicals() {
-        return radicals;
+      return radicals;
     }
 
     public int getKanji() {
-        return kanji;
+      return kanji;
     }
 
     public int getVocabulary() {
-        return vocabulary;
+      return vocabulary;
     }
 
     public int getTotal() {
-        return total;
+      return total;
     }
   }
 }

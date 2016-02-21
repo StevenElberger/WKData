@@ -63,10 +63,25 @@ public class UserInformation {
   private long creationDate;
   /**
    * The time from which the user has been on vacation status.
+   * May be {@code null}.
    */
   @JsonProperty("vacation_date")
   private Long vacationDate;
 
+  /**
+   * Constructor.
+   * @param username the user's username
+   * @param gravatar the user's gravatar md5
+   * @param level the user's level
+   * @param title the user's title
+   * @param about the user's about me string
+   * @param website the user's website
+   * @param twitter the user's twitter username
+   * @param topicsCount the num of topics created
+   * @param postsCount the num of posts created
+   * @param creationDate the account creation date
+   * @param vacationDate the time account was put on vacation, if applicable
+   */
   public UserInformation(String username, String gravatar, int level,
                           String title, String about, String website,
                           String twitter, int topicsCount, int postsCount,
@@ -83,79 +98,47 @@ public class UserInformation {
     this.creationDate = creationDate;
     this.vacationDate = vacationDate;
   }
-  /**
-   * @return the username
-   */
+
   public String getUsername() {
     return username;
   }
 
-  /**
-   * @return the gravatar ID
-   */
   public String getGravatar() {
     return gravatar;
   }
 
-  /**
-   * @return the user's level
-   */
   public int getLevel() {
     return level;
   }
 
-  /**
-   * @return the title of the user's section
-   */
   public String getTitle() {
     return title;
   }
 
-  /**
-   * @return the about string
-   */
   public String getAbout() {
     return about;
   }
 
-  /**
-   * @return the website URL
-   */
   public String getWebsite() {
     return website;
   }
 
-  /**
-   * @return the twitter username
-   */
   public String getTwitter() {
     return twitter;
   }
 
-  /**
-   * @return the number of forum topics created
-   */
   public int getTopicsCount() {
     return topicsCount;
   }
 
-  /**
-   * @return the number of forum posts created
-   */
   public int getPostsCount() {
     return postsCount;
   }
 
-  /**
-   * @return the account creation date (unix timestamp)
-   */
   public long getCreationDate() {
     return creationDate;
   }
 
-  /**
-   * @return the vacation start date (Unix timestamp)
-   */
   public Long getVacationDate() {
     return vacationDate;
   }

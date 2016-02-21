@@ -15,14 +15,23 @@ import java.io.IOException;
 public class StudyQueueDeserializer extends JsonDeserializer<StudyQueue> {
 
   @Override
-  public StudyQueue deserialize(JsonParser jp, DeserializationContext ctxt) throws IOException, JsonProcessingException {
+  public StudyQueue deserialize(JsonParser jp, DeserializationContext ctxt) 
+                                  throws IOException, JsonProcessingException {
     JsonNode node = jp.getCodec().readTree(jp);
     node = node.get("requested_information");
     int lessonsAvailable = Integer.parseInt(node.get("lessons_available").asText());
     int reviewsAvailable = Integer.parseInt(node.get("reviews_available").asText());
-    long nextReviewDate = Long.parseLong(node.get("next_review_date").asText());
-    int reviewsAvailableNextHour = Integer.parseInt(node.get("reviews_available_next_hour").asText());
+    String nextReviewDateString = node.get("next_review_date").asText();
+    Long nextReviewDate;
+    if (nextReviewDateString.equals("null")) {
+      nextReviewDate = null;
+    } else {
+      nextReviewDate = Long.parseLong(node.get("next_review_date").asText());
+    }
+    int reviewsAvailableNextHour = 
+            Integer.parseInt(node.get("reviews_available_next_hour").asText());
     int reviewsAvailableNextDay = Integer.parseInt(node.get("reviews_available_next_day").asText());
-    return new StudyQueue(lessonsAvailable, reviewsAvailable, nextReviewDate, reviewsAvailableNextHour, reviewsAvailableNextDay);
+    return new StudyQueue(lessonsAvailable, reviewsAvailable, nextReviewDate, 
+                            reviewsAvailableNextHour, reviewsAvailableNextDay);
   }
 }

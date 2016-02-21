@@ -15,7 +15,8 @@ import java.io.IOException;
 public class UserInformationDeserializer extends JsonDeserializer<UserInformation> {
 
   @Override
-  public UserInformation deserialize(JsonParser jp, DeserializationContext ctxt) throws IOException, JsonProcessingException {
+  public UserInformation deserialize(JsonParser jp, DeserializationContext ctxt) 
+                                      throws IOException, JsonProcessingException {
     JsonNode node = jp.getCodec().readTree(jp);
     node = node.get("user_information");
     String username = node.get("username").asText();
@@ -35,6 +36,8 @@ public class UserInformationDeserializer extends JsonDeserializer<UserInformatio
     } else {
       vacationDate = Long.parseLong(node.get("vacation_date").asText());
     }
-    return new UserInformation(username, gravatar, level, title, about, website, twitter, topicsCount, postsCount, creationDate, vacationDate);
+    return new UserInformation(username, gravatar, level, title, 
+                                about, website, twitter, topicsCount, 
+                                postsCount, creationDate, vacationDate);
   }
 }

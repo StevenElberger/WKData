@@ -1,7 +1,5 @@
 package com.steve.wkdata;
 
-import java.io.IOException;
-
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -9,6 +7,8 @@ import okhttp3.HttpUrl;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
+
+import java.io.IOException;
 
 /**
  * A representation of a response from the WaniKani API.
@@ -21,19 +21,19 @@ public class WaniKaniUser {
   /**
    * The URL to request user's user information.
    */
-  private HttpUrl userInformationURL;
+  private HttpUrl userInformationUrl;
   /**
    * The URL to request the user's study queue.
    */
-  private HttpUrl studyQueueURL;
+  private HttpUrl studyQueueUrl;
   /**
    * The URL to request the user's level progression.
    */
-  private HttpUrl levelProgressionURL;
+  private HttpUrl levelProgressionUrl;
   /**
    * The URL to request the user's SRS distribution.
    */
-  private HttpUrl srsDistributionURL;
+  private HttpUrl srsDistributionUrl;
   /**
    * A request for the user's user information.
    */
@@ -86,22 +86,22 @@ public class WaniKaniUser {
    * An object containing the user's SRS distribution.
    */
   @JsonProperty("srs_distribution")
-  private SRSDistribution srsDistribution;
+  private SrsDistribution srsDistribution;
 
   /**
-   * Constructor
+   * Constructor.
    * @param key the API key for this user
    */
   public WaniKaniUser(String key) {
     this.key = key;
-    userInformationURL = new HttpUrl.Builder()
+    userInformationUrl = new HttpUrl.Builder()
             .scheme("https")
             .host("www.wanikani.com")
             .addPathSegment("api")
             .addPathSegment("user")
             .addPathSegment(key)
             .build();
-    studyQueueURL = new HttpUrl.Builder()
+    studyQueueUrl = new HttpUrl.Builder()
             .scheme("https")
             .host("www.wanikani.com")
             .addPathSegment("api")
@@ -109,7 +109,7 @@ public class WaniKaniUser {
             .addPathSegment(key)
             .addPathSegment("study-queue")
             .build();
-    levelProgressionURL = new HttpUrl.Builder()
+    levelProgressionUrl = new HttpUrl.Builder()
             .scheme("https")
             .host("www.wanikani.com")
             .addPathSegment("api")
@@ -117,7 +117,7 @@ public class WaniKaniUser {
             .addPathSegment(key)
             .addPathSegment("level-progression")
             .build();
-    srsDistributionURL = new HttpUrl.Builder()
+    srsDistributionUrl = new HttpUrl.Builder()
             .scheme("https")
             .host("www.wanikani.com")
             .addPathSegment("api")
@@ -126,16 +126,16 @@ public class WaniKaniUser {
             .addPathSegment("srs-distribution")
             .build();
     userInformationRequest = new Request.Builder()
-            .url(userInformationURL)
+            .url(userInformationUrl)
             .build();
     studyQueueRequest = new Request.Builder()
-            .url(studyQueueURL)
+            .url(studyQueueUrl)
             .build();
     levelProgressionRequest = new Request.Builder()
-            .url(levelProgressionURL)
+            .url(levelProgressionUrl)
             .build();
     srsDistributionRequest = new Request.Builder()
-            .url(srsDistributionURL)
+            .url(srsDistributionUrl)
             .build();
     client = new OkHttpClient();
   }
@@ -156,8 +156,8 @@ public class WaniKaniUser {
    * @throws IOException if the call to the API fails
    */
   public UserInformation getUserInformation() throws IOException {
-    if (userInformation == null || (userInformation != null && 
-            System.currentTimeMillis() - THIRTY_MINUTES >= callTimestamps[0])) {
+    if (userInformation == null || (userInformation != null 
+            && System.currentTimeMillis() - THIRTY_MINUTES >= callTimestamps[0])) {
       response = client.newCall(userInformationRequest).execute();
       if (response.isSuccessful()) {
         ObjectMapper mapper = new ObjectMapper();
@@ -176,8 +176,8 @@ public class WaniKaniUser {
    * @throws IOException if the call to the API fails
    */
   public StudyQueue getStudyQueue() throws IOException {
-    if (studyQueue == null || (studyQueue != null && 
-            System.currentTimeMillis() - THIRTY_MINUTES >= callTimestamps[1])) {
+    if (studyQueue == null || (studyQueue != null 
+            && System.currentTimeMillis() - THIRTY_MINUTES >= callTimestamps[1])) {
       response = client.newCall(studyQueueRequest).execute();
       if (response.isSuccessful()) {
         ObjectMapper mapper = new ObjectMapper();
@@ -196,8 +196,8 @@ public class WaniKaniUser {
    * @throws IOException if the call to the API fails
    */
   public LevelProgression getLevelProgression() throws IOException {
-    if (levelProgression == null || (levelProgression != null && 
-            System.currentTimeMillis() - THIRTY_MINUTES >= callTimestamps[2])) {
+    if (levelProgression == null || (levelProgression != null 
+            && System.currentTimeMillis() - THIRTY_MINUTES >= callTimestamps[2])) {
       response = client.newCall(levelProgressionRequest).execute();
       if (response.isSuccessful()) {
         ObjectMapper mapper = new ObjectMapper();
@@ -215,13 +215,13 @@ public class WaniKaniUser {
    * @return the user's SRS distribution
    * @throws IOException if the call to the API fails
    */
-  public SRSDistribution getSRSDistribution() throws IOException {
-    if (srsDistribution == null || (srsDistribution != null && 
-            System.currentTimeMillis() - THIRTY_MINUTES >= callTimestamps[3])) {
+  public SrsDistribution getSrsDistribution() throws IOException {
+    if (srsDistribution == null || (srsDistribution != null 
+            && System.currentTimeMillis() - THIRTY_MINUTES >= callTimestamps[3])) {
       response = client.newCall(srsDistributionRequest).execute();
       if (response.isSuccessful()) {
         ObjectMapper mapper = new ObjectMapper();
-        srsDistribution = mapper.readValue(response.body().string(), SRSDistribution.class);
+        srsDistribution = mapper.readValue(response.body().string(), SrsDistribution.class);
         callTimestamps[3] = System.currentTimeMillis();
       }
     }

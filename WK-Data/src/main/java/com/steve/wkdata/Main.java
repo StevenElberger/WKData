@@ -55,19 +55,20 @@ public class Main {
    */
   public static void processAction(int userInput) {
     switch (userInput) {
-    case 1:
-      printUserInformation();
-      break;
-    case 2:
-      printStudyQueue();
-      break;
-    case 3:
-      printLevelProgression();
-      break;
-    case 4:
-      printSRSDistribution();
-    default:
-      break;
+      case 1:
+        printUserInformation();
+        break;
+      case 2:
+        printStudyQueue();
+        break;
+      case 3:
+        printLevelProgression();
+        break;
+      case 4:
+        printSrsDistribution();
+        break;
+      default:
+        break;
     }
   }
 
@@ -112,13 +113,17 @@ public class Main {
     long refreshTime = user.getCallTimestamps()[1];
     StudyQueue studyQueue;
     try {
-        studyQueue = user.getStudyQueue();
+      studyQueue = user.getStudyQueue();
       System.out.println("Displaying level progression:");
       System.out.println("Last refreshed: " + new Date(refreshTime));
       System.out.println("Lessons available: " + studyQueue.getLessonsAvailable());
       System.out.println("Reviews available: " + studyQueue.getReviewsAvailable());
-      System.out.println("Next review date: " + new Date(studyQueue.getNextReviewDate()));
-      System.out.println("Reviews available next hour: " + studyQueue.getReviewsAvailableNextHour());
+      if (studyQueue.getNextReviewDate() == null) {
+        System.out.println("Next review date: null");
+      } else {
+        System.out.println("Next review date: " + new Date(studyQueue.getNextReviewDate()));
+      }
+      System.out.println("Reviews available next hr: " + studyQueue.getReviewsAvailableNextHour());
       System.out.println("Reviews available next day: " + studyQueue.getReviewsAvailableNextDay());
     } catch (IOException e) {
       System.out.println("Error getting study queue");
@@ -147,11 +152,11 @@ public class Main {
   /**
    * Prints the user's SRS distribution.
    */
-  public static void printSRSDistribution() {
+  public static void printSrsDistribution() {
     long refreshTime = user.getCallTimestamps()[3];
-    SRSDistribution srsDistribution;
+    SrsDistribution srsDistribution;
     try {
-      srsDistribution = user.getSRSDistribution();
+      srsDistribution = user.getSrsDistribution();
       System.out.println("Displaying level progression:");
       System.out.println("Last refreshed: " + new Date(refreshTime));
       System.out.println("Apprentice---");

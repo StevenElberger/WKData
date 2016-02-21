@@ -60,14 +60,14 @@ public class MockServiceTest {
   }
 
   @Test
-  public void getSRSDistribution_serializes() throws JsonParseException, JsonMappingException,
+  public void getSrsDistribution_serializes() throws JsonParseException, JsonMappingException,
                                                                                       IOException {
     //SET UP
     ObjectMapper mapper = new ObjectMapper();
-    WaniKaniUser wkr = mapper.readValue(MockService.getSRSDistribution(), WaniKaniUser.class);
+    WaniKaniUser wkr = mapper.readValue(MockService.getSrsDistribution(), WaniKaniUser.class);
 
     // ACT
-    SRSDistribution srsDistribution = wkr.getSRSDistribution();
+    SrsDistribution srsDistribution = wkr.getSrsDistribution();
 
     // ASSERT
     assertNotNull(srsDistribution);

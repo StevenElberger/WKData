@@ -30,6 +30,13 @@ public class LevelProgression {
   @JsonProperty("kanji_total")
   private int kanjiTotal;
 
+  /**
+   * Constructor.
+   * @param radicalsProgress the num of radicals in progress
+   * @param radicalsTotal the num of radicals total
+   * @param kanjiProgress the num of kanji in progress
+   * @param kanjiTotal the num of kanji in total
+   */
   public LevelProgression(int radicalsProgress, int radicalsTotal, 
                               int kanjiProgress, int kanjiTotal) {
     this.radicalsProgress = radicalsProgress;
@@ -38,30 +45,18 @@ public class LevelProgression {
     this.kanjiTotal = kanjiTotal;
   }
 
-  /**
-   * @return the radicalsProgress
-   */
   public int getRadicalsProgress() {
     return radicalsProgress;
   }
 
-  /**
-   * @return the radicalsTotal
-   */
   public int getRadicalsTotal() {
     return radicalsTotal;
   }
 
-  /**
-   * @return the kanjiProgress
-   */
   public int getKanjiProgress() {
     return kanjiProgress;
   }
 
-  /**
-   * @return the kanjiTotal
-   */
   public int getKanjiTotal() {
     return kanjiTotal;
   }

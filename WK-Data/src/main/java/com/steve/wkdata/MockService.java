@@ -22,7 +22,7 @@ public class MockService {
     return LEVEL_PROGRESSION;
   }
 
-  public static String getSRSDistribution() {
+  public static String getSrsDistribution() {
     return SRS_DISTRIBUTION;
   }
 }

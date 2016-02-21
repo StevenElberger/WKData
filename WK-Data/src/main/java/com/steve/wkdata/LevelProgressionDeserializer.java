@@ -15,7 +15,8 @@ import java.io.IOException;
 public class LevelProgressionDeserializer extends JsonDeserializer<LevelProgression> {
 
   @Override
-  public LevelProgression deserialize(JsonParser jp, DeserializationContext ctxt) throws IOException, JsonProcessingException {
+  public LevelProgression deserialize(JsonParser jp, DeserializationContext ctxt) 
+                                      throws IOException, JsonProcessingException {
     JsonNode node = jp.getCodec().readTree(jp);
     node = node.get("requested_information");
     int radicalsProgress = Integer.parseInt(node.get("radicals_progress").asText());
