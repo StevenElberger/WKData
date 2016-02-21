@@ -67,6 +67,10 @@ public class HttpHandler {
    */
   private HttpUrl recentUnlocksListUrl;
   /**
+   * The URL to request the user's recent unlocks list with a limit.
+   */
+  private HttpUrl recentUnlocksListWithLimitUrl;
+  /**
    * A request for the user's user information.
    */
   private Request userInformationRequest;
@@ -86,6 +90,10 @@ public class HttpHandler {
    * A request for the user's recent unlocks list.
    */
   private Request recentUnlocksListRequest;
+  /**
+   * A request for the user's recent unlocks list with a limit.
+   */
+  private Request recentUnlocksListRequestWithLimit;
   /**
    * The client to handle the calls.
    */
@@ -246,6 +254,45 @@ public class HttpHandler {
       System.out.println("Error getting srs distribution");
     }
     
+    return recentUnlocksList;
+  }
+
+  /**
+   * Makes a call to the API to get the user's recent unlocks list.
+   * Specified limit must be between 1 and 100.
+   * @return recent unlocks list (may be {@code null} if failure)
+   */
+  public RecentUnlocksList getRecentUnlocksList(int limit, String key) {
+    RecentUnlocksList recentUnlocksList = null;
+    // fail if limit was bad
+    if (limit < 1 || limit > 100) {
+      return null;
+    }
+    // have to construct a new URL with the new limit
+    recentUnlocksListWithLimitUrl = new HttpUrl.Builder()
+            .scheme(SCHEME)
+            .host(HOST)
+            .addPathSegment(API_STRING)
+            .addPathSegment(USER_STRING)
+            .addPathSegment(key)
+            .addPathSegment(RECENT_UNLOCKS_STRING)
+            .addPathSegment(String.valueOf(limit))
+            .build();
+    if (recentUnlocksListRequestWithLimit == null) {
+      recentUnlocksListRequestWithLimit = new Request.Builder()
+            .url(recentUnlocksListWithLimitUrl)
+            .build();
+    }
+    try {
+      response = client.newCall(recentUnlocksListRequestWithLimit).execute();
+      if (response.isSuccessful()) {
+        ObjectMapper mapper = new ObjectMapper();
+        recentUnlocksList = mapper.readValue(response.body().string(), RecentUnlocksList.class);
+      }
+    } catch (IOException e) {
+      System.out.println("Error getting srs distribution");
+    }
+
     return recentUnlocksList;
   }
 }

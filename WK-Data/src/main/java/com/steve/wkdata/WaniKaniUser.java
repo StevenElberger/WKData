@@ -37,6 +37,11 @@ public class WaniKaniUser {
    */
   @JsonProperty("srs_distribution")
   private SrsDistribution srsDistribution;
+  /**
+   * An object containing the user's recent unlocks list.
+   */
+  @JsonProperty("recent_unlocks")
+  private RecentUnlocksList recentUnlocksList;
 
   /**
    * Constructor.
@@ -117,5 +122,40 @@ public class WaniKaniUser {
       }
     }
     return srsDistribution;
+  }
+
+  /**
+   * Retrieve's the user's recent unlocks list.
+   * If the data is nonexistent or expired, the data
+   * will be retrieved and returned from the API.
+   * @return the user's recent unlocks list (may be {@code null})
+   */
+  public RecentUnlocksList getRecentUnlocksList() {
+    if (recentUnlocksList == null || (recentUnlocksList != null && recentUnlocksList.isExpired())) {
+      RecentUnlocksList response = httpHandler.getRecentUnlocksList();
+      // check for failure (return what we have already if failed)
+      if (response != null) {
+        recentUnlocksList = response;
+      }
+    }
+    return recentUnlocksList;
+  }
+
+  /**
+   * Retrieve's the user's recent unlocks list with a limit.
+   * If the data is nonexistent or expired, the data
+   * will be retrieved and returned from the API.
+   * Limit must be within 1 and 100.
+   * @return the user's recent unlocks list (may be {@code null})
+   */
+  public RecentUnlocksList getRecentUnlocksList(int limit) {
+    if (recentUnlocksList == null || (recentUnlocksList != null && recentUnlocksList.isExpired())) {
+      RecentUnlocksList response = httpHandler.getRecentUnlocksList(limit, key);
+      // check for failure (return what we have already if failed)
+      if (response != null) {
+        recentUnlocksList = response;
+      }
+    }
+    return recentUnlocksList;
   }
 }
