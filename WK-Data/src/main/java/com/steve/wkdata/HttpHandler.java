@@ -15,6 +15,38 @@ import java.io.IOException;
  */
 public class HttpHandler {
   /**
+   * The scheme for each call.
+   */
+  private static final String SCHEME = "https";
+  /**
+   * The host for each call.
+   */
+  private static final String HOST = "www.wanikani.com";
+  /**
+   * Path segment for each call.
+   */
+  private static final String API_STRING = "api";
+  /**
+   * Path segment for each call.
+   */
+  private static final String USER_STRING = "user";
+  /**
+   * Path segment for study queue call.
+   */
+  private static final String STUDY_QUEUE_STRING = "study-queue";
+  /**
+   * Path segment for level progression call.
+   */
+  private static final String LEVEL_PROGRESSION_STRING = "level-progression";
+  /**
+   * Path segment for SRS distribution call.
+   */
+  private static final String SRS_DISTRIBUTION_STRING = "srs-distribution";
+  /**
+   * Path segment for recent unlocks call.
+   */
+  private static final String RECENT_UNLOCKS_STRING = "recent-unlocks";
+  /**
    * The URL to request user's user information.
    */
   private HttpUrl userInformationUrl;
@@ -30,6 +62,10 @@ public class HttpHandler {
    * The URL to request the user's SRS distribution.
    */
   private HttpUrl srsDistributionUrl;
+  /**
+   * The URL to request the user's recent unlocks list.
+   */
+  private HttpUrl recentUnlocksListUrl;
   /**
    * A request for the user's user information.
    */
@@ -47,6 +83,10 @@ public class HttpHandler {
    */
   private Request srsDistributionRequest;
   /**
+   * A request for the user's recent unlocks list.
+   */
+  private Request recentUnlocksListRequest;
+  /**
    * The client to handle the calls.
    */
   private OkHttpClient client;
@@ -61,35 +101,43 @@ public class HttpHandler {
    */
   public HttpHandler(String key) {
     userInformationUrl = new HttpUrl.Builder()
-            .scheme("https")
-            .host("www.wanikani.com")
-            .addPathSegment("api")
-            .addPathSegment("user")
+            .scheme(SCHEME)
+            .host(HOST)
+            .addPathSegment(API_STRING)
+            .addPathSegment(USER_STRING)
             .addPathSegment(key)
             .build();
     studyQueueUrl = new HttpUrl.Builder()
-            .scheme("https")
-            .host("www.wanikani.com")
-            .addPathSegment("api")
-            .addPathSegment("user")
+            .scheme(SCHEME)
+            .host(HOST)
+            .addPathSegment(API_STRING)
+            .addPathSegment(USER_STRING)
             .addPathSegment(key)
-            .addPathSegment("study-queue")
+            .addPathSegment(STUDY_QUEUE_STRING)
             .build();
     levelProgressionUrl = new HttpUrl.Builder()
-            .scheme("https")
-            .host("www.wanikani.com")
-            .addPathSegment("api")
-            .addPathSegment("user")
+            .scheme(SCHEME)
+            .host(HOST)
+            .addPathSegment(API_STRING)
+            .addPathSegment(USER_STRING)
             .addPathSegment(key)
-            .addPathSegment("level-progression")
+            .addPathSegment(LEVEL_PROGRESSION_STRING)
             .build();
     srsDistributionUrl = new HttpUrl.Builder()
-            .scheme("https")
-            .host("www.wanikani.com")
-            .addPathSegment("api")
-            .addPathSegment("user")
+            .scheme(SCHEME)
+            .host(HOST)
+            .addPathSegment(API_STRING)
+            .addPathSegment(USER_STRING)
             .addPathSegment(key)
-            .addPathSegment("srs-distribution")
+            .addPathSegment(SRS_DISTRIBUTION_STRING)
+            .build();
+    recentUnlocksListUrl = new HttpUrl.Builder()
+            .scheme(SCHEME)
+            .host(HOST)
+            .addPathSegment(API_STRING)
+            .addPathSegment(USER_STRING)
+            .addPathSegment(key)
+            .addPathSegment(RECENT_UNLOCKS_STRING)
             .build();
     userInformationRequest = new Request.Builder()
             .url(userInformationUrl)
@@ -102,6 +150,9 @@ public class HttpHandler {
             .build();
     srsDistributionRequest = new Request.Builder()
             .url(srsDistributionUrl)
+            .build();
+    recentUnlocksListRequest = new Request.Builder()
+            .url(recentUnlocksListUrl)
             .build();
     client = new OkHttpClient();
   }
@@ -177,5 +228,24 @@ public class HttpHandler {
     }
     
     return srsDistribution;
+  }
+
+  /**
+   * Makes a call to the API to get the user's recent unlocks list.
+   * @return recent unlocks list (may be {@code null} if failure)
+   */
+  public RecentUnlocksList getRecentUnlocksList() {
+    RecentUnlocksList recentUnlocksList = null;
+    try {
+      response = client.newCall(recentUnlocksListRequest).execute();
+      if (response.isSuccessful()) {
+        ObjectMapper mapper = new ObjectMapper();
+        recentUnlocksList = mapper.readValue(response.body().string(), RecentUnlocksList.class);
+      }
+    } catch (IOException e) {
+      System.out.println("Error getting srs distribution");
+    }
+    
+    return recentUnlocksList;
   }
 }

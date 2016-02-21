@@ -23,6 +23,18 @@ public class Kanji extends Item {
    */
   private String importantReading;
 
+  /**
+   * Constructor.
+   * @param type the type
+   * @param character the character
+   * @param meaning the meanings
+   * @param onyomi the on'yomi
+   * @param kunyomi the kun'yomi
+   * @param nanori the nanori
+   * @param importantReading the important reading
+   * @param level the level at which it's unlocked
+   * @param unlockedDate the date at which it was unlocked
+   */
   public Kanji(String type, String character, 
           String[] meaning, String onyomi, String[] kunyomi, 
           String nanori, String importantReading, int level, long unlockedDate) {
