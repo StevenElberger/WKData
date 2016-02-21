@@ -26,12 +26,13 @@ public class StudyQueueDeserializer extends JsonDeserializer<StudyQueue> {
     if (nextReviewDateString.equals("null")) {
       nextReviewDate = null;
     } else {
-      nextReviewDate = Long.parseLong(node.get("next_review_date").asText());
+      nextReviewDate = Long.parseLong(node.get("next_review_date").asText()) * 1000;
     }
     int reviewsAvailableNextHour = 
             Integer.parseInt(node.get("reviews_available_next_hour").asText());
     int reviewsAvailableNextDay = Integer.parseInt(node.get("reviews_available_next_day").asText());
+    long lastRefreshed = System.currentTimeMillis();
     return new StudyQueue(lessonsAvailable, reviewsAvailable, nextReviewDate, 
-                            reviewsAvailableNextHour, reviewsAvailableNextDay);
+                            reviewsAvailableNextHour, reviewsAvailableNextDay, lastRefreshed);
   }
 }

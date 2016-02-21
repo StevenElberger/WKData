@@ -10,6 +10,14 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 @JsonDeserialize(using = SrsDistributionDeserializer.class)
 public class SrsDistribution {
   /**
+   * The expiration time limit for this object. Set to 1 hour.
+   */
+  private static final long EXPIRATION_TIME = 60 * 60 * 1000;
+  /**
+   * The timestamp of the last time this object was refreshed with new data.
+   */
+  private long lastRefreshed = 0;
+  /**
    * The apprentice-level srs item.
    */
   @JsonProperty("apprentice")
@@ -34,6 +42,26 @@ public class SrsDistribution {
    */
   @JsonProperty("burned")
   private SrsItem burned;
+
+  /**
+   * Constructor.
+   * @param lastRefreshed the time this object was constructed (expiration purposes)
+   */
+  public SrsDistribution(long lastRefreshed) {
+    this.lastRefreshed = lastRefreshed;
+  }
+
+  /**
+   * Checks if the data has expired.
+   * @return true if expired, false otherwise
+   */
+  public boolean isExpired() {
+    return System.currentTimeMillis() - EXPIRATION_TIME >= lastRefreshed;
+  }
+
+  public long getLastRefreshed() {
+    return lastRefreshed;
+  }
 
   public SrsItem getApprentice() {
     return apprentice;

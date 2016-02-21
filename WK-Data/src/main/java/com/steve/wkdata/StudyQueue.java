@@ -10,6 +10,14 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 @JsonDeserialize(using = StudyQueueDeserializer.class)
 public class StudyQueue {
   /**
+   * The expiration time limit for this object. Set to 1 hour.
+   */
+  private static final long EXPIRATION_TIME = 60 * 60 * 1000;
+  /**
+   * The timestamp of the last time this object was refreshed with new data.
+   */
+  private long lastRefreshed = 0;
+  /**
    * The number of lessons currently available.
    */
   @JsonProperty("lessons_available")
@@ -43,14 +51,29 @@ public class StudyQueue {
    * @param nextReviewDate the next review date
    * @param reviewsAvailableNextHour the num of reviews available in the next hour
    * @param reviewsAvailableNextDay the num of reviews available in the next day
+   * @param lastRefreshed the time this object was constructed (expiration purposes)
    */
-  public StudyQueue(int lessonsAvailable, int reviewsAvailable, long nextReviewDate, 
-                          int reviewsAvailableNextHour, int reviewsAvailableNextDay) {
+  public StudyQueue(int lessonsAvailable, int reviewsAvailable, 
+                    long nextReviewDate, int reviewsAvailableNextHour, 
+                    int reviewsAvailableNextDay, long lastRefreshed) {
     this.lessonsAvailable = lessonsAvailable;
     this.reviewsAvailable = reviewsAvailable;
     this.nextReviewDate = nextReviewDate;
     this.reviewsAvailableNextHour = reviewsAvailableNextHour;
     this.reviewsAvailableNextDay = reviewsAvailableNextDay;
+    this.lastRefreshed = lastRefreshed;
+  }
+
+  /**
+   * Checks if the data has expired.
+   * @return true if expired, false otherwise
+   */
+  public boolean isExpired() {
+    return System.currentTimeMillis() - EXPIRATION_TIME >= lastRefreshed;
+  }
+
+  public long getLastRefreshed() {
+    return lastRefreshed;
   }
 
   public int getLessonsAvailable() {

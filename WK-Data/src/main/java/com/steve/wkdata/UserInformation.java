@@ -10,7 +10,14 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
  */
 @JsonDeserialize(using = UserInformationDeserializer.class)
 public class UserInformation {
-
+  /**
+   * The expiration time limit for this object. Set to 12 hours.
+   */
+  private static final long EXPIRATION_TIME = 12 * 60 * 60 * 1000;
+  /**
+   * The timestamp of the last time this object was refreshed with new data.
+   */
+  private long lastRefreshed = 0;
   /**
    * The username.
    */
@@ -81,11 +88,12 @@ public class UserInformation {
    * @param postsCount the num of posts created
    * @param creationDate the account creation date
    * @param vacationDate the time account was put on vacation, if applicable
+   * @param lastRefreshed the time this object was constructed (expiration purposes)
    */
   public UserInformation(String username, String gravatar, int level,
                           String title, String about, String website,
                           String twitter, int topicsCount, int postsCount,
-                          long creationDate, Long vacationDate) {
+                          long creationDate, Long vacationDate, long lastRefreshed) {
     this.username = username;
     this.gravatar = gravatar;
     this.level = level;
@@ -97,6 +105,19 @@ public class UserInformation {
     this.postsCount = postsCount;
     this.creationDate = creationDate;
     this.vacationDate = vacationDate;
+    this.lastRefreshed = lastRefreshed;
+  }
+
+  /**
+   * Checks if the data has expired.
+   * @return true if expired, false otherwise
+   */
+  public boolean isExpired() {
+    return System.currentTimeMillis() - EXPIRATION_TIME >= lastRefreshed;
+  }
+
+  public long getLastRefreshed() {
+    return lastRefreshed;
   }
 
   public String getUsername() {

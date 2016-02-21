@@ -21,7 +21,8 @@ public class SrsDistributionDeserializer extends JsonDeserializer<SrsDistributio
     JsonNode node = jp.getCodec().readTree(jp);
     node = node.get("requested_information");
     String[] nodes = {"apprentice", "guru", "master", "enlighten", "burned"};
-    SrsDistribution srsDistribution = new SrsDistribution();
+    long lastRefreshed = System.currentTimeMillis();
+    SrsDistribution srsDistribution = new SrsDistribution(lastRefreshed);
     SrsItem[] items = new SrsItem[5];
     for (int i = 0; i < nodes.length; i++) {
       JsonNode dataNode = node.get(nodes[i]);

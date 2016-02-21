@@ -17,7 +17,6 @@ import java.io.IOException;
  * @author Steve
  */
 public class WaniKaniUser {
-  private static final long THIRTY_MINUTES = 30 * 60 * 1000;
   /**
    * The URL to request user's user information.
    */
@@ -58,11 +57,6 @@ public class WaniKaniUser {
    * A generic response object for all calls.
    */
   private Response response;
-  /**
-   * An array to hold the timestamps of the last time
-   * each object was refreshed (data caching purposes).
-   */
-  private long[] callTimestamps = {0, 0, 0, 0};
   /**
    * The user's API key.
    */
@@ -144,10 +138,6 @@ public class WaniKaniUser {
     return key;
   }
 
-  public long[] getCallTimestamps() {
-    return callTimestamps;
-  }
-
   /**
    * Retrieves the user's user information.
    * If the data is nonexistent or expired, the data
@@ -156,13 +146,11 @@ public class WaniKaniUser {
    * @throws IOException if the call to the API fails
    */
   public UserInformation getUserInformation() throws IOException {
-    if (userInformation == null || (userInformation != null 
-            && System.currentTimeMillis() - THIRTY_MINUTES >= callTimestamps[0])) {
+    if (userInformation == null || (userInformation != null && userInformation.isExpired())) {
       response = client.newCall(userInformationRequest).execute();
       if (response.isSuccessful()) {
         ObjectMapper mapper = new ObjectMapper();
         userInformation = mapper.readValue(response.body().string(), UserInformation.class);
-        callTimestamps[0] = System.currentTimeMillis();
       }
     }
     return userInformation;
@@ -176,13 +164,11 @@ public class WaniKaniUser {
    * @throws IOException if the call to the API fails
    */
   public StudyQueue getStudyQueue() throws IOException {
-    if (studyQueue == null || (studyQueue != null 
-            && System.currentTimeMillis() - THIRTY_MINUTES >= callTimestamps[1])) {
+    if (studyQueue == null || (studyQueue != null && studyQueue.isExpired())) {
       response = client.newCall(studyQueueRequest).execute();
       if (response.isSuccessful()) {
         ObjectMapper mapper = new ObjectMapper();
         studyQueue = mapper.readValue(response.body().string(), StudyQueue.class);
-        callTimestamps[1] = System.currentTimeMillis();
       }
     }
     return studyQueue;
@@ -196,13 +182,11 @@ public class WaniKaniUser {
    * @throws IOException if the call to the API fails
    */
   public LevelProgression getLevelProgression() throws IOException {
-    if (levelProgression == null || (levelProgression != null 
-            && System.currentTimeMillis() - THIRTY_MINUTES >= callTimestamps[2])) {
+    if (levelProgression == null || (levelProgression != null && levelProgression.isExpired())) {
       response = client.newCall(levelProgressionRequest).execute();
       if (response.isSuccessful()) {
         ObjectMapper mapper = new ObjectMapper();
         levelProgression = mapper.readValue(response.body().string(), LevelProgression.class);
-        callTimestamps[2] = System.currentTimeMillis();
       }
     }
     return levelProgression;
@@ -216,13 +200,11 @@ public class WaniKaniUser {
    * @throws IOException if the call to the API fails
    */
   public SrsDistribution getSrsDistribution() throws IOException {
-    if (srsDistribution == null || (srsDistribution != null 
-            && System.currentTimeMillis() - THIRTY_MINUTES >= callTimestamps[3])) {
+    if (srsDistribution == null || (srsDistribution != null && srsDistribution.isExpired())) {
       response = client.newCall(srsDistributionRequest).execute();
       if (response.isSuccessful()) {
         ObjectMapper mapper = new ObjectMapper();
         srsDistribution = mapper.readValue(response.body().string(), SrsDistribution.class);
-        callTimestamps[3] = System.currentTimeMillis();
       }
     }
     return srsDistribution;

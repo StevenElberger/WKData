@@ -28,16 +28,17 @@ public class UserInformationDeserializer extends JsonDeserializer<UserInformatio
     String twitter = node.get("twitter").asText();
     int topicsCount = Integer.parseInt(node.get("topics_count").asText());
     int postsCount = Integer.parseInt(node.get("posts_count").asText());
-    long creationDate = Long.parseLong(node.get("creation_date").asText());
+    long creationDate = Long.parseLong(node.get("creation_date").asText()) * 1000;
     String vacationString = node.get("vacation_date").asText();
     Long vacationDate;
     if (vacationString.equals("null")) {
       vacationDate = null;
     } else {
-      vacationDate = Long.parseLong(node.get("vacation_date").asText());
+      vacationDate = Long.parseLong(node.get("vacation_date").asText()) * 1000;
     }
+    long lastRefreshed = System.currentTimeMillis();
     return new UserInformation(username, gravatar, level, title, 
                                 about, website, twitter, topicsCount, 
-                                postsCount, creationDate, vacationDate);
+                                postsCount, creationDate, vacationDate, lastRefreshed);
   }
 }

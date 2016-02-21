@@ -10,6 +10,14 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 @JsonDeserialize(using = LevelProgressionDeserializer.class)
 public class LevelProgression {
   /**
+   * The expiration time limit for this object. Set to 1 hour.
+   */
+  private static final long EXPIRATION_TIME = 60 * 60 * 1000;
+  /**
+   * The timestamp of the last time this object was refreshed with new data.
+   */
+  private long lastRefreshed = 0;
+  /**
    * The user's progress through the current level's radicals.
    */
   @JsonProperty("radicals_progress")
@@ -36,13 +44,27 @@ public class LevelProgression {
    * @param radicalsTotal the num of radicals total
    * @param kanjiProgress the num of kanji in progress
    * @param kanjiTotal the num of kanji in total
+   * @param lastRefreshed the time this object was constructed (expiration purposes)
    */
   public LevelProgression(int radicalsProgress, int radicalsTotal, 
-                              int kanjiProgress, int kanjiTotal) {
+                              int kanjiProgress, int kanjiTotal, long lastRefreshed) {
     this.radicalsProgress = radicalsProgress;
     this.radicalsTotal = radicalsTotal;
     this.kanjiProgress = kanjiProgress;
     this.kanjiTotal = kanjiTotal;
+    this.lastRefreshed = lastRefreshed;
+  }
+
+  /**
+   * Checks if the data has expired.
+   * @return true if expired, false otherwise
+   */
+  public boolean isExpired() {
+    return System.currentTimeMillis() - EXPIRATION_TIME >= lastRefreshed;
+  }
+
+  public long getLastRefreshed() {
+    return lastRefreshed;
   }
 
   public int getRadicalsProgress() {

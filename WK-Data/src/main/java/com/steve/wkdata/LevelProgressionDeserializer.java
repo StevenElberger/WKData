@@ -23,6 +23,8 @@ public class LevelProgressionDeserializer extends JsonDeserializer<LevelProgress
     int radicalsTotal = Integer.parseInt(node.get("radicals_total").asText());
     int kanjiProgress = Integer.parseInt(node.get("kanji_progress").asText());
     int kanjiTotal = Integer.parseInt(node.get("kanji_total").asText());
-    return new LevelProgression(radicalsProgress, radicalsTotal, kanjiProgress, kanjiTotal);
+    long lastRefreshed = System.currentTimeMillis();
+    return new LevelProgression(radicalsProgress, 
+            radicalsTotal, kanjiProgress, kanjiTotal, lastRefreshed);
   }
 }

@@ -76,12 +76,11 @@ public class Main {
    * Prints the user's user information.
    */
   public static void printUserInformation() {
-    long refreshTime = user.getCallTimestamps()[0];
     UserInformation userInfo;
     try {
       userInfo = user.getUserInformation();
       System.out.println("Displaying user information:");
-      System.out.println("Last refreshed: " + new Date(refreshTime));
+      System.out.println("Last refreshed: " + new Date(userInfo.getLastRefreshed()));
       System.out.println("Username: " + userInfo.getUsername());
       System.out.println("Gravatar: " + userInfo.getGravatar());
       System.out.println("Level: " + userInfo.getLevel());
@@ -110,12 +109,11 @@ public class Main {
    * Prints the user's study queue.
    */
   public static void printStudyQueue() {
-    long refreshTime = user.getCallTimestamps()[1];
     StudyQueue studyQueue;
     try {
       studyQueue = user.getStudyQueue();
       System.out.println("Displaying level progression:");
-      System.out.println("Last refreshed: " + new Date(refreshTime));
+      System.out.println("Last refreshed: " + new Date(studyQueue.getLastRefreshed()));
       System.out.println("Lessons available: " + studyQueue.getLessonsAvailable());
       System.out.println("Reviews available: " + studyQueue.getReviewsAvailable());
       if (studyQueue.getNextReviewDate() == null) {
@@ -134,12 +132,11 @@ public class Main {
    * Prints the user's level progression.
    */
   public static void printLevelProgression() {
-    long refreshTime = user.getCallTimestamps()[2];
     LevelProgression levelProgression;
     try {
       levelProgression = user.getLevelProgression();
       System.out.println("Displaying level progression:");
-      System.out.println("Last refreshed: " + new Date(refreshTime));
+      System.out.println("Last refreshed: " + new Date(levelProgression.getLastRefreshed()));
       System.out.println("Radicals progress: " + levelProgression.getRadicalsProgress());
       System.out.println("Radicals total: " + levelProgression.getRadicalsTotal());
       System.out.println("Kanji progress: " + levelProgression.getKanjiProgress());
@@ -153,12 +150,11 @@ public class Main {
    * Prints the user's SRS distribution.
    */
   public static void printSrsDistribution() {
-    long refreshTime = user.getCallTimestamps()[3];
     SrsDistribution srsDistribution;
     try {
       srsDistribution = user.getSrsDistribution();
       System.out.println("Displaying level progression:");
-      System.out.println("Last refreshed: " + new Date(refreshTime));
+      System.out.println("Last refreshed: " + new Date(srsDistribution.getLastRefreshed()));
       System.out.println("Apprentice---");
       System.out.println("Radicals: " + srsDistribution.getApprentice().getRadicals());
       System.out.println("Kanji: " + srsDistribution.getApprentice().getKanji());
