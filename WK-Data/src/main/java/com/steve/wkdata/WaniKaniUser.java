@@ -89,7 +89,7 @@ public class WaniKaniUser {
   private SRSDistribution srsDistribution;
 
   /**
-   * Going to be the true constructor soon.
+   * Constructor
    * @param key the API key for this user
    */
   public WaniKaniUser(String key) {
@@ -148,6 +148,13 @@ public class WaniKaniUser {
     return callTimestamps;
   }
 
+  /**
+   * Retrieves the user's user information.
+   * If the data is nonexistent or expired, the data
+   * will be retrieved and returned from the API.
+   * @return the user's user information
+   * @throws IOException if the call to the API fails
+   */
   public UserInformation getUserInformation() throws IOException {
     if (userInformation == null || (userInformation != null && 
             System.currentTimeMillis() - THIRTY_MINUTES >= callTimestamps[0])) {
@@ -161,6 +168,13 @@ public class WaniKaniUser {
     return userInformation;
   }
 
+  /**
+   * Retrieve's the user's study queue.
+   * If the data is nonexistent or expired, the data
+   * will be retrieved and returned from the API.
+   * @return the user's study queue
+   * @throws IOException if the call to the API fails
+   */
   public StudyQueue getStudyQueue() throws IOException {
     if (studyQueue == null || (studyQueue != null && 
             System.currentTimeMillis() - THIRTY_MINUTES >= callTimestamps[1])) {
@@ -174,6 +188,13 @@ public class WaniKaniUser {
     return studyQueue;
   }
 
+  /**
+   * Retrieve's the user's level progression.
+   * If the data is nonexistent or expired, the data
+   * will be retrieved and returned from the API.
+   * @return the user's level progression
+   * @throws IOException if the call to the API fails
+   */
   public LevelProgression getLevelProgression() throws IOException {
     if (levelProgression == null || (levelProgression != null && 
             System.currentTimeMillis() - THIRTY_MINUTES >= callTimestamps[2])) {
@@ -187,6 +208,13 @@ public class WaniKaniUser {
     return levelProgression;
   }
 
+  /**
+   * Retrieve's the user's SRS distribution.
+   * If the data is nonexistent or expired, the data
+   * will be retrieved and returned from the API.
+   * @return the user's SRS distribution
+   * @throws IOException if the call to the API fails
+   */
   public SRSDistribution getSRSDistribution() throws IOException {
     if (srsDistribution == null || (srsDistribution != null && 
             System.currentTimeMillis() - THIRTY_MINUTES >= callTimestamps[3])) {

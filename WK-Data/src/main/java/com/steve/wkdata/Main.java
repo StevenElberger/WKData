@@ -4,6 +4,11 @@ import java.io.IOException;
 import java.util.Date;
 import java.util.Scanner;
 
+/**
+ * Application entry point. Simply takes an API key
+ * and prompts the user to select data to retrieve and display.
+ * @author Steve
+ */
 public class Main {
   private static WaniKaniUser user;
 
@@ -21,9 +26,10 @@ public class Main {
   public static void printMenu() {
     System.out.println("\nCurrent options are:");
     System.out.println("1) Print user information");
-    System.out.println("2) Print level progression");
-    System.out.println("3) Print SRS distribution");
-    System.out.println("4) Quit\n");
+    System.out.println("2) Print study queue");
+    System.out.println("3) Print level progression");
+    System.out.println("4) Print SRS distribution");
+    System.out.println("5) Quit\n");
   }
 
   /**
@@ -34,7 +40,7 @@ public class Main {
     Scanner scanner = new Scanner(System.in);
     System.out.println("Enter an API key: ");
     user = new WaniKaniUser(scanner.nextLine());
-    while (userInput != 4) {
+    while (userInput != 5) {
       printMenu();
       System.out.println("Please enter a selection: ");
       userInput = Integer.parseInt(scanner.nextLine());
@@ -43,6 +49,10 @@ public class Main {
     scanner.close();
   }
 
+  /**
+   * Processes the user's response and acts accordingly.
+   * @param userInput the input from the user
+   */
   public static void processAction(int userInput) {
     switch (userInput) {
     case 1:
@@ -61,6 +71,9 @@ public class Main {
     }
   }
 
+  /**
+   * Prints the user's user information.
+   */
   public static void printUserInformation() {
     long refreshTime = user.getCallTimestamps()[0];
     UserInformation userInfo;
@@ -92,6 +105,9 @@ public class Main {
     }
   }
 
+  /**
+   * Prints the user's study queue.
+   */
   public static void printStudyQueue() {
     long refreshTime = user.getCallTimestamps()[1];
     StudyQueue studyQueue;
@@ -109,6 +125,9 @@ public class Main {
     }
   }
 
+  /**
+   * Prints the user's level progression.
+   */
   public static void printLevelProgression() {
     long refreshTime = user.getCallTimestamps()[2];
     LevelProgression levelProgression;
@@ -125,6 +144,9 @@ public class Main {
     }
   }
 
+  /**
+   * Prints the user's SRS distribution.
+   */
   public static void printSRSDistribution() {
     long refreshTime = user.getCallTimestamps()[3];
     SRSDistribution srsDistribution;
