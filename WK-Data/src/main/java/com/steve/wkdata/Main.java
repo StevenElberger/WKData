@@ -1,6 +1,5 @@
 package com.steve.wkdata;
 
-import java.io.IOException;
 import java.util.Date;
 import java.util.Scanner;
 
@@ -76,9 +75,8 @@ public class Main {
    * Prints the user's user information.
    */
   public static void printUserInformation() {
-    UserInformation userInfo;
-    try {
-      userInfo = user.getUserInformation();
+    UserInformation userInfo = user.getUserInformation();
+    if (userInfo != null) {
       System.out.println("Displaying user information:");
       System.out.println("Last refreshed: " + new Date(userInfo.getLastRefreshed()));
       System.out.println("Username: " + userInfo.getUsername());
@@ -100,8 +98,6 @@ public class Main {
       } else {
         System.out.println("Vacation date: " + new Date(userInfo.getVacationDate()));
       }
-    } catch (IOException e) {
-      System.out.println("Error getting user information");
     }
   }
 
@@ -109,9 +105,8 @@ public class Main {
    * Prints the user's study queue.
    */
   public static void printStudyQueue() {
-    StudyQueue studyQueue;
-    try {
-      studyQueue = user.getStudyQueue();
+    StudyQueue studyQueue = user.getStudyQueue();
+    if (studyQueue != null) {
       System.out.println("Displaying level progression:");
       System.out.println("Last refreshed: " + new Date(studyQueue.getLastRefreshed()));
       System.out.println("Lessons available: " + studyQueue.getLessonsAvailable());
@@ -123,8 +118,6 @@ public class Main {
       }
       System.out.println("Reviews available next hr: " + studyQueue.getReviewsAvailableNextHour());
       System.out.println("Reviews available next day: " + studyQueue.getReviewsAvailableNextDay());
-    } catch (IOException e) {
-      System.out.println("Error getting study queue");
     }
   }
 
@@ -132,17 +125,14 @@ public class Main {
    * Prints the user's level progression.
    */
   public static void printLevelProgression() {
-    LevelProgression levelProgression;
-    try {
-      levelProgression = user.getLevelProgression();
+    LevelProgression levelProgression = user.getLevelProgression();
+    if (levelProgression != null) {
       System.out.println("Displaying level progression:");
       System.out.println("Last refreshed: " + new Date(levelProgression.getLastRefreshed()));
       System.out.println("Radicals progress: " + levelProgression.getRadicalsProgress());
       System.out.println("Radicals total: " + levelProgression.getRadicalsTotal());
       System.out.println("Kanji progress: " + levelProgression.getKanjiProgress());
       System.out.println("Kanji total: " + levelProgression.getKanjiTotal());
-    } catch (IOException e) {
-      System.out.println("Error getting level progression");
     }
   }
 
@@ -150,9 +140,8 @@ public class Main {
    * Prints the user's SRS distribution.
    */
   public static void printSrsDistribution() {
-    SrsDistribution srsDistribution;
-    try {
-      srsDistribution = user.getSrsDistribution();
+    SrsDistribution srsDistribution = user.getSrsDistribution();
+    if (srsDistribution != null) {
       System.out.println("Displaying level progression:");
       System.out.println("Last refreshed: " + new Date(srsDistribution.getLastRefreshed()));
       System.out.println("Apprentice---");
@@ -180,8 +169,6 @@ public class Main {
       System.out.println("Kanji: " + srsDistribution.getBurned().getKanji());
       System.out.println("Vocabulary: " + srsDistribution.getBurned().getVocabulary());
       System.out.println("Total: " + srsDistribution.getBurned().getTotal());
-    } catch (IOException e) {
-      System.out.println("Error getting level progression");
     }
   }
 }

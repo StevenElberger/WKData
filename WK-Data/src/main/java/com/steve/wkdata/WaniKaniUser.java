@@ -1,14 +1,6 @@
 package com.steve.wkdata;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.databind.ObjectMapper;
-
-import okhttp3.HttpUrl;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.Response;
-
-import java.io.IOException;
 
 /**
  * A representation of a response from the WaniKani API.
@@ -18,45 +10,9 @@ import java.io.IOException;
  */
 public class WaniKaniUser {
   /**
-   * The URL to request user's user information.
+   * The HttpHandler object which makes calls to the API.
    */
-  private HttpUrl userInformationUrl;
-  /**
-   * The URL to request the user's study queue.
-   */
-  private HttpUrl studyQueueUrl;
-  /**
-   * The URL to request the user's level progression.
-   */
-  private HttpUrl levelProgressionUrl;
-  /**
-   * The URL to request the user's SRS distribution.
-   */
-  private HttpUrl srsDistributionUrl;
-  /**
-   * A request for the user's user information.
-   */
-  private Request userInformationRequest;
-  /**
-   * A request for the user's study queue.
-   */
-  private Request studyQueueRequest;
-  /**
-   * A request for the user's level progression.
-   */
-  private Request levelProgressionRequest;
-  /**
-   * A request for the user's SRS distribution.
-   */
-  private Request srsDistributionRequest;
-  /**
-   * The client to handle the calls.
-   */
-  private OkHttpClient client;
-  /**
-   * A generic response object for all calls.
-   */
-  private Response response;
+  HttpHandler httpHandler;
   /**
    * The user's API key.
    */
@@ -88,50 +44,7 @@ public class WaniKaniUser {
    */
   public WaniKaniUser(String key) {
     this.key = key;
-    userInformationUrl = new HttpUrl.Builder()
-            .scheme("https")
-            .host("www.wanikani.com")
-            .addPathSegment("api")
-            .addPathSegment("user")
-            .addPathSegment(key)
-            .build();
-    studyQueueUrl = new HttpUrl.Builder()
-            .scheme("https")
-            .host("www.wanikani.com")
-            .addPathSegment("api")
-            .addPathSegment("user")
-            .addPathSegment(key)
-            .addPathSegment("study-queue")
-            .build();
-    levelProgressionUrl = new HttpUrl.Builder()
-            .scheme("https")
-            .host("www.wanikani.com")
-            .addPathSegment("api")
-            .addPathSegment("user")
-            .addPathSegment(key)
-            .addPathSegment("level-progression")
-            .build();
-    srsDistributionUrl = new HttpUrl.Builder()
-            .scheme("https")
-            .host("www.wanikani.com")
-            .addPathSegment("api")
-            .addPathSegment("user")
-            .addPathSegment(key)
-            .addPathSegment("srs-distribution")
-            .build();
-    userInformationRequest = new Request.Builder()
-            .url(userInformationUrl)
-            .build();
-    studyQueueRequest = new Request.Builder()
-            .url(studyQueueUrl)
-            .build();
-    levelProgressionRequest = new Request.Builder()
-            .url(levelProgressionUrl)
-            .build();
-    srsDistributionRequest = new Request.Builder()
-            .url(srsDistributionUrl)
-            .build();
-    client = new OkHttpClient();
+    httpHandler = new HttpHandler(key);
   }
 
   public String getKey() {
@@ -142,15 +55,14 @@ public class WaniKaniUser {
    * Retrieves the user's user information.
    * If the data is nonexistent or expired, the data
    * will be retrieved and returned from the API.
-   * @return the user's user information
-   * @throws IOException if the call to the API fails
+   * @return the user's user information (may be {@code null})
    */
-  public UserInformation getUserInformation() throws IOException {
+  public UserInformation getUserInformation() {
     if (userInformation == null || (userInformation != null && userInformation.isExpired())) {
-      response = client.newCall(userInformationRequest).execute();
-      if (response.isSuccessful()) {
-        ObjectMapper mapper = new ObjectMapper();
-        userInformation = mapper.readValue(response.body().string(), UserInformation.class);
+      UserInformation response = httpHandler.getUserInformation();
+      // check for failure (return what we have already if failed)
+      if (response != null) {
+        userInformation = response;
       }
     }
     return userInformation;
@@ -160,15 +72,14 @@ public class WaniKaniUser {
    * Retrieve's the user's study queue.
    * If the data is nonexistent or expired, the data
    * will be retrieved and returned from the API.
-   * @return the user's study queue
-   * @throws IOException if the call to the API fails
+   * @return the user's study queue (may be {@code null})
    */
-  public StudyQueue getStudyQueue() throws IOException {
+  public StudyQueue getStudyQueue() {
     if (studyQueue == null || (studyQueue != null && studyQueue.isExpired())) {
-      response = client.newCall(studyQueueRequest).execute();
-      if (response.isSuccessful()) {
-        ObjectMapper mapper = new ObjectMapper();
-        studyQueue = mapper.readValue(response.body().string(), StudyQueue.class);
+      StudyQueue response = httpHandler.getStudyQueue();
+      // check for failure (return what we have already if failed)
+      if (response != null) {
+        studyQueue = response;
       }
     }
     return studyQueue;
@@ -178,15 +89,14 @@ public class WaniKaniUser {
    * Retrieve's the user's level progression.
    * If the data is nonexistent or expired, the data
    * will be retrieved and returned from the API.
-   * @return the user's level progression
-   * @throws IOException if the call to the API fails
+   * @return the user's level progression (may be {@code null})
    */
-  public LevelProgression getLevelProgression() throws IOException {
+  public LevelProgression getLevelProgression() {
     if (levelProgression == null || (levelProgression != null && levelProgression.isExpired())) {
-      response = client.newCall(levelProgressionRequest).execute();
-      if (response.isSuccessful()) {
-        ObjectMapper mapper = new ObjectMapper();
-        levelProgression = mapper.readValue(response.body().string(), LevelProgression.class);
+      LevelProgression response = httpHandler.getLevelProgression();
+      // check for failure (return what we have already if failed)
+      if (response != null) {
+        levelProgression = response;
       }
     }
     return levelProgression;
@@ -196,15 +106,14 @@ public class WaniKaniUser {
    * Retrieve's the user's SRS distribution.
    * If the data is nonexistent or expired, the data
    * will be retrieved and returned from the API.
-   * @return the user's SRS distribution
-   * @throws IOException if the call to the API fails
+   * @return the user's SRS distribution (may be {@code null})
    */
-  public SrsDistribution getSrsDistribution() throws IOException {
+  public SrsDistribution getSrsDistribution() {
     if (srsDistribution == null || (srsDistribution != null && srsDistribution.isExpired())) {
-      response = client.newCall(srsDistributionRequest).execute();
-      if (response.isSuccessful()) {
-        ObjectMapper mapper = new ObjectMapper();
-        srsDistribution = mapper.readValue(response.body().string(), SrsDistribution.class);
+      SrsDistribution response = httpHandler.getSrsDistribution();
+      // check for failure (return what we have already if failed)
+      if (response != null) {
+        srsDistribution = response;
       }
     }
     return srsDistribution;
