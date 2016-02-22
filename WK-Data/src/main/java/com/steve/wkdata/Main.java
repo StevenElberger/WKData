@@ -28,7 +28,8 @@ public class Main {
     System.out.println("2) Print study queue");
     System.out.println("3) Print level progression");
     System.out.println("4) Print SRS distribution");
-    System.out.println("5) Quit\n");
+    System.out.println("5) Print recent unlocks list");
+    System.out.println("6) Quit\n");
   }
 
   /**
@@ -39,7 +40,7 @@ public class Main {
     Scanner scanner = new Scanner(System.in);
     System.out.println("Enter an API key: ");
     user = new WaniKaniUser(scanner.nextLine());
-    while (userInput != 5) {
+    while (userInput != 6) {
       printMenu();
       System.out.println("Please enter a selection: ");
       userInput = Integer.parseInt(scanner.nextLine());
@@ -65,6 +66,9 @@ public class Main {
         break;
       case 4:
         printSrsDistribution();
+        break;
+      case 5:
+        printRecentUnlocksList();
         break;
       default:
         break;
@@ -107,7 +111,7 @@ public class Main {
   public static void printStudyQueue() {
     StudyQueue studyQueue = user.getStudyQueue();
     if (studyQueue != null) {
-      System.out.println("Displaying level progression:");
+      System.out.println("Displaying study queue:");
       System.out.println("Last refreshed: " + new Date(studyQueue.getLastRefreshed()));
       System.out.println("Lessons available: " + studyQueue.getLessonsAvailable());
       System.out.println("Reviews available: " + studyQueue.getReviewsAvailable());
@@ -142,7 +146,7 @@ public class Main {
   public static void printSrsDistribution() {
     SrsDistribution srsDistribution = user.getSrsDistribution();
     if (srsDistribution != null) {
-      System.out.println("Displaying level progression:");
+      System.out.println("Displaying srs distribution:");
       System.out.println("Last refreshed: " + new Date(srsDistribution.getLastRefreshed()));
       System.out.println("Apprentice---");
       System.out.println("Radicals: " + srsDistribution.getApprentice().getRadicals());
@@ -169,6 +173,47 @@ public class Main {
       System.out.println("Kanji: " + srsDistribution.getBurned().getKanji());
       System.out.println("Vocabulary: " + srsDistribution.getBurned().getVocabulary());
       System.out.println("Total: " + srsDistribution.getBurned().getTotal());
+    }
+  }
+
+  /**
+   * Prints the user's recent unlocks list.
+   */
+  public static void printRecentUnlocksList() {
+    RecentUnlocksList recentUnlocksList = user.getRecentUnlocksList();
+    if (recentUnlocksList != null) {
+      System.out.println("Display recent unlocks list:");
+      System.out.println("Last refreshed: " + new Date(recentUnlocksList.getLastRefreshed()));
+      Item[] itemList = recentUnlocksList.getList();
+      for (int i = 0; i < itemList.length; i++) {
+        String type = itemList[i].getType();
+        System.out.println("Type: " + type);
+        System.out.println("Character: " + itemList[i].getCharacter());
+        String[] meanings = itemList[i].getMeaning();
+        for (int j = 0; j < meanings.length; j++) {
+          System.out.println("Meaning[" + j + "]: " + meanings[j]);
+        }
+        System.out.println("Level: " + itemList[i].getLevel());
+        System.out.println("Unlocked date: " + new Date(itemList[i].getUnlockedDate()));
+        if (type.equals("vocabulary")) {
+          Vocabulary item = (Vocabulary) itemList[i];
+          System.out.println("Kana: " + item.getKana());
+        } else if (type.equals("Radical")) {
+          Radical item = (Radical) itemList[i];
+          if (item.getImage() != null) {
+            System.out.println("Image: " + item.getImage());
+          }
+        } else if (type.equals("Kanji")) {
+          Kanji item = (Kanji) itemList[i];
+          System.out.println("On'yomi: " + item.getOnyomi());
+          if (item.getKunyomi() != null) {
+            System.out.println("Kun'yomi: " + item.getKunyomi());
+          }
+          System.out.println("Nanori: " + item.getNanori());
+          System.out.println("Important reading: " + item.getImportantReading());
+        }
+        
+      }
     }
   }
 }

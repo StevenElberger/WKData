@@ -26,6 +26,10 @@ public abstract class Item {
    * The date this item was unlocked.
    */
   private long unlockedDate;
+  /**
+   * The percent this item has been reviewed correctly. (may be {@code null})
+   */
+  private Integer percentage;
 
   /**
    * Constructor.
@@ -42,6 +46,14 @@ public abstract class Item {
     this.meaning = meaning;
     this.level = level;
     this.unlockedDate = unlockedDate;
+  }
+
+  public void setPercentage(Integer percentage) {
+    this.percentage = percentage;
+  }
+
+  public Integer getPercentage() {
+    return percentage;
   }
 
   public String getType() {

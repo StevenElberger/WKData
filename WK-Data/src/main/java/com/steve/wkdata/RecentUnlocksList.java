@@ -1,10 +1,13 @@
 package com.steve.wkdata;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+
 /**
  * The list of recently unlocked items.
  * Consists of radicals, kanji, or vocabulary items.
  * @author Steve
  */
+@JsonDeserialize(using = RecentUnlocksListDeserializer.class)
 public class RecentUnlocksList {
   /**
    * The expiration time limit for this object. Set to 1 hour.
