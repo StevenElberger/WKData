@@ -41,7 +41,12 @@ public class WaniKaniUser {
    * An object containing the user's recent unlocks list.
    */
   @JsonProperty("recent_unlocks")
-  private RecentUnlocksList recentUnlocksList;
+  private ItemsList recentUnlocksList;
+  /**
+   * An object containing the user's critical items list.
+   */
+  @JsonProperty("critical_items")
+  private ItemsList criticalItemsList;
 
   /**
    * Constructor.
@@ -130,9 +135,9 @@ public class WaniKaniUser {
    * will be retrieved and returned from the API.
    * @return the user's recent unlocks list (may be {@code null})
    */
-  public RecentUnlocksList getRecentUnlocksList() {
+  public ItemsList getRecentUnlocksList() {
     if (recentUnlocksList == null || (recentUnlocksList != null && recentUnlocksList.isExpired())) {
-      RecentUnlocksList response = httpHandler.getRecentUnlocksList();
+      ItemsList response = httpHandler.getRecentUnlocksList();
       // check for failure (return what we have already if failed)
       if (response != null) {
         recentUnlocksList = response;
@@ -148,12 +153,47 @@ public class WaniKaniUser {
    * Limit must be within 1 and 100.
    * @return the user's recent unlocks list (may be {@code null})
    */
-  public RecentUnlocksList getRecentUnlocksList(int limit) {
+  public ItemsList getRecentUnlocksList(int limit) {
     if (recentUnlocksList == null || (recentUnlocksList != null && recentUnlocksList.isExpired())) {
-      RecentUnlocksList response = httpHandler.getRecentUnlocksList(limit, key);
+      ItemsList response = httpHandler.getRecentUnlocksList(limit, key);
       // check for failure (return what we have already if failed)
       if (response != null) {
         recentUnlocksList = response;
+      }
+    }
+    return recentUnlocksList;
+  }
+
+  /**
+   * Retrieve's the user's recent unlocks list.
+   * If the data is nonexistent or expired, the data
+   * will be retrieved and returned from the API.
+   * @return the user's recent unlocks list (may be {@code null})
+   */
+  public ItemsList getCriticalItemsList() {
+    if (criticalItemsList == null || (criticalItemsList != null && criticalItemsList.isExpired())) {
+      ItemsList response = httpHandler.getCriticalItemsList();
+      // check for failure (return what we have already if failed)
+      if (response != null) {
+          criticalItemsList = response;
+      }
+    }
+    return criticalItemsList;
+  }
+
+  /**
+   * Retrieve's the user's recent unlocks list with a limit.
+   * If the data is nonexistent or expired, the data
+   * will be retrieved and returned from the API.
+   * Limit must be within 1 and 100.
+   * @return the user's recent unlocks list (may be {@code null})
+   */
+  public ItemsList getCriticalItemsList(int limit) {
+    if (criticalItemsList == null || (criticalItemsList != null && criticalItemsList.isExpired())) {
+      ItemsList response = httpHandler.getCriticalItemsList(limit, key);
+      // check for failure (return what we have already if failed)
+      if (response != null) {
+          criticalItemsList = response;
       }
     }
     return recentUnlocksList;

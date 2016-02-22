@@ -47,6 +47,10 @@ public class HttpHandler {
    */
   private static final String RECENT_UNLOCKS_STRING = "recent-unlocks";
   /**
+   * Path segment for critical items call.
+   */
+  private static final String CRITICAL_ITEMS_STRING = "critical-items";
+  /**
    * The URL to request user's user information.
    */
   private HttpUrl userInformationUrl;
@@ -71,6 +75,14 @@ public class HttpHandler {
    */
   private HttpUrl recentUnlocksListWithLimitUrl;
   /**
+   * The URL to request the user's critical items list.
+   */
+  private HttpUrl criticalItemsListUrl;
+  /**
+   * The URL to request the user's critical items list with a limit.
+   */
+  private HttpUrl criticalItemsListWithLimitUrl;
+  /**
    * A request for the user's user information.
    */
   private Request userInformationRequest;
@@ -94,6 +106,14 @@ public class HttpHandler {
    * A request for the user's recent unlocks list with a limit.
    */
   private Request recentUnlocksListRequestWithLimit;
+  /**
+   * A request for the user's critical items list.
+   */
+  private Request criticalItemsListRequest;
+  /**
+   * A request for the user's critical items list with a limit.
+   */
+  private Request criticalItemsListRequestWithLimit;
   /**
    * The client to handle the calls.
    */
@@ -147,6 +167,14 @@ public class HttpHandler {
             .addPathSegment(key)
             .addPathSegment(RECENT_UNLOCKS_STRING)
             .build();
+    criticalItemsListUrl = new HttpUrl.Builder()
+            .scheme(SCHEME)
+            .host(HOST)
+            .addPathSegment(API_STRING)
+            .addPathSegment(USER_STRING)
+            .addPathSegment(key)
+            .addPathSegment(CRITICAL_ITEMS_STRING)
+            .build();
     userInformationRequest = new Request.Builder()
             .url(userInformationUrl)
             .build();
@@ -161,6 +189,9 @@ public class HttpHandler {
             .build();
     recentUnlocksListRequest = new Request.Builder()
             .url(recentUnlocksListUrl)
+            .build();
+    criticalItemsListRequest = new Request.Builder()
+            .url(criticalItemsListUrl)
             .build();
     client = new OkHttpClient();
   }
@@ -234,7 +265,6 @@ public class HttpHandler {
     } catch (IOException e) {
       System.out.println("Error getting srs distribution");
     }
-    
     return srsDistribution;
   }
 
@@ -242,18 +272,17 @@ public class HttpHandler {
    * Makes a call to the API to get the user's recent unlocks list.
    * @return recent unlocks list (may be {@code null} if failure)
    */
-  public RecentUnlocksList getRecentUnlocksList() {
-    RecentUnlocksList recentUnlocksList = null;
+  public ItemsList getRecentUnlocksList() {
+    ItemsList recentUnlocksList = null;
     try {
       response = client.newCall(recentUnlocksListRequest).execute();
       if (response.isSuccessful()) {
         ObjectMapper mapper = new ObjectMapper();
-        recentUnlocksList = mapper.readValue(response.body().string(), RecentUnlocksList.class);
+        recentUnlocksList = mapper.readValue(response.body().string(), ItemsList.class);
       }
     } catch (IOException e) {
-      System.out.println("Error getting srs distribution");
+      System.out.println("Error getting recent unlocks list");
     }
-    
     return recentUnlocksList;
   }
 
@@ -262,8 +291,8 @@ public class HttpHandler {
    * Specified limit must be between 1 and 100.
    * @return recent unlocks list (may be {@code null} if failure)
    */
-  public RecentUnlocksList getRecentUnlocksList(int limit, String key) {
-    RecentUnlocksList recentUnlocksList = null;
+  public ItemsList getRecentUnlocksList(int limit, String key) {
+    ItemsList recentUnlocksList = null;
     // fail if limit was bad
     if (limit < 1 || limit > 100) {
       return null;
@@ -287,12 +316,67 @@ public class HttpHandler {
       response = client.newCall(recentUnlocksListRequestWithLimit).execute();
       if (response.isSuccessful()) {
         ObjectMapper mapper = new ObjectMapper();
-        recentUnlocksList = mapper.readValue(response.body().string(), RecentUnlocksList.class);
+        recentUnlocksList = mapper.readValue(response.body().string(), ItemsList.class);
       }
     } catch (IOException e) {
-      System.out.println("Error getting srs distribution");
+      System.out.println("Error getting recent unlocks list");
     }
-
     return recentUnlocksList;
+  }
+
+  /**
+   * Makes a call to the API to get the user's critical items list.
+   * @return critical items list (may be {@code null} if failure)
+   */
+  public ItemsList getCriticalItemsList() {
+    ItemsList criticalItemsList = null;
+    try {
+      response = client.newCall(criticalItemsListRequest).execute();
+      if (response.isSuccessful()) {
+        ObjectMapper mapper = new ObjectMapper();
+        criticalItemsList = mapper.readValue(response.body().string(), ItemsList.class);
+      }
+    } catch (IOException e) {
+      System.out.println("Error getting critical items list");
+    }
+    return criticalItemsList;
+  }
+
+  /**
+   * Makes a call to the API to get the user's critical items list.
+   * Specified limit must be between 0 and 100.
+   * @return critical items list (may be {@code null} if failure)
+   */
+  public ItemsList getCriticalItemsList(int limit, String key) {
+    ItemsList criticalItemsList = null;
+    // fail if limit was bad
+    if (limit < 0 || limit > 100) {
+      return null;
+    }
+    // have to construct a new URL with the new limit
+    criticalItemsListWithLimitUrl = new HttpUrl.Builder()
+            .scheme(SCHEME)
+            .host(HOST)
+            .addPathSegment(API_STRING)
+            .addPathSegment(USER_STRING)
+            .addPathSegment(key)
+            .addPathSegment(CRITICAL_ITEMS_STRING)
+            .addPathSegment(String.valueOf(limit))
+            .build();
+    if (criticalItemsListRequestWithLimit == null) {
+        criticalItemsListRequestWithLimit = new Request.Builder()
+            .url(criticalItemsListWithLimitUrl)
+            .build();
+    }
+    try {
+      response = client.newCall(recentUnlocksListRequestWithLimit).execute();
+      if (response.isSuccessful()) {
+        ObjectMapper mapper = new ObjectMapper();
+        criticalItemsList = mapper.readValue(response.body().string(), ItemsList.class);
+      }
+    } catch (IOException e) {
+      System.out.println("Error getting critical items list");
+    }
+    return criticalItemsList;
   }
 }

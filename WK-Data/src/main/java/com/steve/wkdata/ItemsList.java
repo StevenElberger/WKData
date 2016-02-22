@@ -3,12 +3,12 @@ package com.steve.wkdata;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
 /**
- * The list of recently unlocked items.
+ * The list of items (recent unlocks or critical).
  * Consists of radicals, kanji, or vocabulary items.
  * @author Steve
  */
-@JsonDeserialize(using = RecentUnlocksListDeserializer.class)
-public class RecentUnlocksList {
+@JsonDeserialize(using = ItemsListDeserializer.class)
+public class ItemsList {
   /**
    * The expiration time limit for this object. Set to 1 hour.
    */
@@ -18,7 +18,7 @@ public class RecentUnlocksList {
    */
   private long lastRefreshed = 0;
   /**
-   * The list of recently unlocked items.
+   * The list of items.
    * Can be radicals, kanji, or vocabulary items.
    */
   private Item[] list;
@@ -26,8 +26,9 @@ public class RecentUnlocksList {
   /**
    * Constructor.
    * @param list the list of items
+   * @param lastRefreshed the time this object was constructed (expiration purposes)
    */
-  public RecentUnlocksList(Item[] list, long lastRefreshed) {
+  public ItemsList(Item[] list, long lastRefreshed) {
     this.list = list;
     this.lastRefreshed = lastRefreshed;
   }

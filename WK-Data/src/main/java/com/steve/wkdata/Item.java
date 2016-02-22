@@ -23,9 +23,9 @@ public abstract class Item {
    */
   private int level;
   /**
-   * The date this item was unlocked.
+   * The date this item was unlocked. (may be {@code null})
    */
-  private long unlockedDate;
+  private Long unlockedDate;
   /**
    * The percent this item has been reviewed correctly. (may be {@code null})
    */
@@ -38,17 +38,15 @@ public abstract class Item {
    * @param meaning the item's meaning(s)
    * @param level the item's level at which it can be unlocked
    * @param unlockedDate the date at which the item was unlocked
+   * @param percentage the percentage the item has been reviewed correctly
    */
   public Item(String type, String character, 
-          String[] meaning, int level, long unlockedDate) {
+          String[] meaning, int level, Long unlockedDate, Integer percentage) {
     this.type = type;
     this.character = character;
     this.meaning = meaning;
     this.level = level;
     this.unlockedDate = unlockedDate;
-  }
-
-  public void setPercentage(Integer percentage) {
     this.percentage = percentage;
   }
 

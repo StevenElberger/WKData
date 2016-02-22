@@ -27,18 +27,21 @@ public class Kanji extends Item {
    * Constructor.
    * @param type the type
    * @param character the character
-   * @param meaning the meanings
+   * @param meaning the meaning(s)
    * @param onyomi the on'yomi
    * @param kunyomi the kun'yomi
    * @param nanori the nanori
    * @param importantReading the important reading
    * @param level the level at which it's unlocked
    * @param unlockedDate the date at which it was unlocked
+   * @param percentage the percentage the item has been reviewed correctly
    */
   public Kanji(String type, String character, 
-          String[] meaning, String onyomi, String[] kunyomi, 
-          String nanori, String importantReading, int level, long unlockedDate) {
-    super(type, character, meaning, level, unlockedDate);
+          String[] meaning, String onyomi, 
+          String[] kunyomi, String nanori, 
+          String importantReading, int level, 
+          Long unlockedDate, Integer percentage) {
+    super(type, character, meaning, level, unlockedDate, percentage);
     this.onyomi = onyomi;
     this.kunyomi = kunyomi;
     this.nanori = nanori;

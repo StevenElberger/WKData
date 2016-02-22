@@ -29,7 +29,8 @@ public class Main {
     System.out.println("3) Print level progression");
     System.out.println("4) Print SRS distribution");
     System.out.println("5) Print recent unlocks list");
-    System.out.println("6) Quit\n");
+    System.out.println("6) Print critical items list");
+    System.out.println("7) Quit\n");
   }
 
   /**
@@ -40,7 +41,7 @@ public class Main {
     Scanner scanner = new Scanner(System.in);
     System.out.println("Enter an API key: ");
     user = new WaniKaniUser(scanner.nextLine());
-    while (userInput != 6) {
+    while (userInput != 7) {
       printMenu();
       System.out.println("Please enter a selection: ");
       userInput = Integer.parseInt(scanner.nextLine());
@@ -69,6 +70,9 @@ public class Main {
         break;
       case 5:
         printRecentUnlocksList();
+        break;
+      case 6:
+        printCriticalItemsList();
         break;
       default:
         break;
@@ -180,7 +184,7 @@ public class Main {
    * Prints the user's recent unlocks list.
    */
   public static void printRecentUnlocksList() {
-    RecentUnlocksList recentUnlocksList = user.getRecentUnlocksList();
+    ItemsList recentUnlocksList = user.getRecentUnlocksList();
     if (recentUnlocksList != null) {
       System.out.println("Display recent unlocks list:");
       System.out.println("Last refreshed: " + new Date(recentUnlocksList.getLastRefreshed()));
@@ -212,7 +216,46 @@ public class Main {
           System.out.println("Nanori: " + item.getNanori());
           System.out.println("Important reading: " + item.getImportantReading());
         }
-        
+      }
+    }
+  }
+
+  /**
+   * Prints the user's critical items list.
+   */
+  public static void printCriticalItemsList() {
+    ItemsList criticalItemsList = user.getCriticalItemsList();
+    if (criticalItemsList != null) {
+      System.out.println("Display recent unlocks list:");
+      System.out.println("Last refreshed: " + new Date(criticalItemsList.getLastRefreshed()));
+      Item[] itemList = criticalItemsList.getList();
+      for (int i = 0; i < itemList.length; i++) {
+        String type = itemList[i].getType();
+        System.out.println("Type: " + type);
+        System.out.println("Character: " + itemList[i].getCharacter());
+        String[] meanings = itemList[i].getMeaning();
+        for (int j = 0; j < meanings.length; j++) {
+          System.out.println("Meaning[" + j + "]: " + meanings[j]);
+        }
+        System.out.println("Level: " + itemList[i].getLevel());
+        System.out.println("Percentage: " + itemList[i].getPercentage());
+        if (type.equals("vocabulary")) {
+          Vocabulary item = (Vocabulary) itemList[i];
+          System.out.println("Kana: " + item.getKana());
+        } else if (type.equals("Radical")) {
+          Radical item = (Radical) itemList[i];
+          if (item.getImage() != null) {
+            System.out.println("Image: " + item.getImage());
+          }
+        } else if (type.equals("Kanji")) {
+          Kanji item = (Kanji) itemList[i];
+          System.out.println("On'yomi: " + item.getOnyomi());
+          if (item.getKunyomi() != null) {
+            System.out.println("Kun'yomi: " + item.getKunyomi());
+          }
+          System.out.println("Nanori: " + item.getNanori());
+          System.out.println("Important reading: " + item.getImportantReading());
+        }
       }
     }
   }
