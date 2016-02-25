@@ -136,14 +136,7 @@ public class WaniKaniUser {
    * @return the user's recent unlocks list (may be {@code null})
    */
   public ItemsList getRecentUnlocksList() {
-    if (recentUnlocksList == null || (recentUnlocksList != null && recentUnlocksList.isExpired())) {
-      ItemsList response = httpHandler.getRecentUnlocksList();
-      // check for failure (return what we have already if failed)
-      if (response != null) {
-        recentUnlocksList = response;
-      }
-    }
-    return recentUnlocksList;
+    return getRecentUnlocksList(-1);
   }
 
   /**
@@ -155,7 +148,12 @@ public class WaniKaniUser {
    */
   public ItemsList getRecentUnlocksList(int limit) {
     if (recentUnlocksList == null || (recentUnlocksList != null && recentUnlocksList.isExpired())) {
-      ItemsList response = httpHandler.getRecentUnlocksList(limit);
+      ItemsList response;
+      if (limit == -1) {
+        response = httpHandler.getRecentUnlocksList();
+      } else {
+        response = httpHandler.getRecentUnlocksList(limit);
+      }
       // check for failure (return what we have already if failed)
       if (response != null) {
         recentUnlocksList = response;
@@ -171,14 +169,7 @@ public class WaniKaniUser {
    * @return the user's recent unlocks list (may be {@code null})
    */
   public ItemsList getCriticalItemsList() {
-    if (criticalItemsList == null || (criticalItemsList != null && criticalItemsList.isExpired())) {
-      ItemsList response = httpHandler.getCriticalItemsList();
-      // check for failure (return what we have already if failed)
-      if (response != null) {
-        criticalItemsList = response;
-      }
-    }
-    return criticalItemsList;
+    return getCriticalItemsList(-1);
   }
 
   /**
@@ -190,7 +181,12 @@ public class WaniKaniUser {
    */
   public ItemsList getCriticalItemsList(int limit) {
     if (criticalItemsList == null || (criticalItemsList != null && criticalItemsList.isExpired())) {
-      ItemsList response = httpHandler.getCriticalItemsList(limit);
+      ItemsList response;
+      if (limit == -1) {
+        response = httpHandler.getCriticalItemsList();
+      } else {
+        response = httpHandler.getCriticalItemsList(limit);
+      }
       // check for failure (return what we have already if failed)
       if (response != null) {
         criticalItemsList = response;
