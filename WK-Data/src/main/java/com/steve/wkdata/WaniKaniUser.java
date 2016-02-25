@@ -155,7 +155,7 @@ public class WaniKaniUser {
    */
   public ItemsList getRecentUnlocksList(int limit) {
     if (recentUnlocksList == null || (recentUnlocksList != null && recentUnlocksList.isExpired())) {
-      ItemsList response = httpHandler.getRecentUnlocksList(limit, key);
+      ItemsList response = httpHandler.getRecentUnlocksList(limit);
       // check for failure (return what we have already if failed)
       if (response != null) {
         recentUnlocksList = response;
@@ -175,7 +175,7 @@ public class WaniKaniUser {
       ItemsList response = httpHandler.getCriticalItemsList();
       // check for failure (return what we have already if failed)
       if (response != null) {
-          criticalItemsList = response;
+        criticalItemsList = response;
       }
     }
     return criticalItemsList;
@@ -190,10 +190,10 @@ public class WaniKaniUser {
    */
   public ItemsList getCriticalItemsList(int limit) {
     if (criticalItemsList == null || (criticalItemsList != null && criticalItemsList.isExpired())) {
-      ItemsList response = httpHandler.getCriticalItemsList(limit, key);
+      ItemsList response = httpHandler.getCriticalItemsList(limit);
       // check for failure (return what we have already if failed)
       if (response != null) {
-          criticalItemsList = response;
+        criticalItemsList = response;
       }
     }
     return recentUnlocksList;

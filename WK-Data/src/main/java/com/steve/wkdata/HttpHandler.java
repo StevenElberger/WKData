@@ -15,21 +15,9 @@ import java.io.IOException;
  */
 public class HttpHandler {
   /**
-   * The scheme for each call.
+   * Error string when failing to map to an object.
    */
-  private static final String SCHEME = "https";
-  /**
-   * The host for each call.
-   */
-  private static final String HOST = "www.wanikani.com";
-  /**
-   * Path segment for each call.
-   */
-  private static final String API_STRING = "api";
-  /**
-   * Path segment for each call.
-   */
-  private static final String USER_STRING = "user";
+  private static final String PROBLEM_PARSING = "Problem parsing data back from API";
   /**
    * Path segment for study queue call.
    */
@@ -51,149 +39,85 @@ public class HttpHandler {
    */
   private static final String CRITICAL_ITEMS_STRING = "critical-items";
   /**
+   * Base URL used in constructing other URLs.
+   */
+  private static final HttpUrl BASE_URL = HttpUrl.parse("https://www.wanikani.com/api/user/");
+  /**
    * The URL to request user's user information.
    */
   private HttpUrl userInformationUrl;
   /**
-   * The URL to request the user's study queue.
-   */
-  private HttpUrl studyQueueUrl;
-  /**
-   * The URL to request the user's level progression.
-   */
-  private HttpUrl levelProgressionUrl;
-  /**
-   * The URL to request the user's SRS distribution.
-   */
-  private HttpUrl srsDistributionUrl;
-  /**
-   * The URL to request the user's recent unlocks list.
-   */
-  private HttpUrl recentUnlocksListUrl;
-  /**
-   * The URL to request the user's recent unlocks list with a limit.
-   */
-  private HttpUrl recentUnlocksListWithLimitUrl;
-  /**
-   * The URL to request the user's critical items list.
-   */
-  private HttpUrl criticalItemsListUrl;
-  /**
-   * The URL to request the user's critical items list with a limit.
-   */
-  private HttpUrl criticalItemsListWithLimitUrl;
-  /**
-   * A request for the user's user information.
-   */
-  private Request userInformationRequest;
-  /**
-   * A request for the user's study queue.
-   */
-  private Request studyQueueRequest;
-  /**
-   * A request for the user's level progression.
-   */
-  private Request levelProgressionRequest;
-  /**
-   * A request for the user's SRS distribution.
-   */
-  private Request srsDistributionRequest;
-  /**
-   * A request for the user's recent unlocks list.
-   */
-  private Request recentUnlocksListRequest;
-  /**
-   * A request for the user's recent unlocks list with a limit.
-   */
-  private Request recentUnlocksListRequestWithLimit;
-  /**
-   * A request for the user's critical items list.
-   */
-  private Request criticalItemsListRequest;
-  /**
-   * A request for the user's critical items list with a limit.
-   */
-  private Request criticalItemsListRequestWithLimit;
-  /**
    * The client to handle the calls.
    */
   private OkHttpClient client;
-  /**
-   * A generic response object for all calls.
-   */
-  private Response response;
 
   /**
    * Constructor.
    * @param key the user's API key
    */
   public HttpHandler(String key) {
-    userInformationUrl = new HttpUrl.Builder()
-            .scheme(SCHEME)
-            .host(HOST)
-            .addPathSegment(API_STRING)
-            .addPathSegment(USER_STRING)
+    userInformationUrl = BASE_URL.newBuilder()
             .addPathSegment(key)
-            .build();
-    studyQueueUrl = new HttpUrl.Builder()
-            .scheme(SCHEME)
-            .host(HOST)
-            .addPathSegment(API_STRING)
-            .addPathSegment(USER_STRING)
-            .addPathSegment(key)
-            .addPathSegment(STUDY_QUEUE_STRING)
-            .build();
-    levelProgressionUrl = new HttpUrl.Builder()
-            .scheme(SCHEME)
-            .host(HOST)
-            .addPathSegment(API_STRING)
-            .addPathSegment(USER_STRING)
-            .addPathSegment(key)
-            .addPathSegment(LEVEL_PROGRESSION_STRING)
-            .build();
-    srsDistributionUrl = new HttpUrl.Builder()
-            .scheme(SCHEME)
-            .host(HOST)
-            .addPathSegment(API_STRING)
-            .addPathSegment(USER_STRING)
-            .addPathSegment(key)
-            .addPathSegment(SRS_DISTRIBUTION_STRING)
-            .build();
-    recentUnlocksListUrl = new HttpUrl.Builder()
-            .scheme(SCHEME)
-            .host(HOST)
-            .addPathSegment(API_STRING)
-            .addPathSegment(USER_STRING)
-            .addPathSegment(key)
-            .addPathSegment(RECENT_UNLOCKS_STRING)
-            .build();
-    criticalItemsListUrl = new HttpUrl.Builder()
-            .scheme(SCHEME)
-            .host(HOST)
-            .addPathSegment(API_STRING)
-            .addPathSegment(USER_STRING)
-            .addPathSegment(key)
-            .addPathSegment(CRITICAL_ITEMS_STRING)
-            .build();
-    userInformationRequest = new Request.Builder()
-            .url(userInformationUrl)
-            .build();
-    studyQueueRequest = new Request.Builder()
-            .url(studyQueueUrl)
-            .build();
-    levelProgressionRequest = new Request.Builder()
-            .url(levelProgressionUrl)
-            .build();
-    srsDistributionRequest = new Request.Builder()
-            .url(srsDistributionUrl)
-            .build();
-    recentUnlocksListRequest = new Request.Builder()
-            .url(recentUnlocksListUrl)
-            .build();
-    criticalItemsListRequest = new Request.Builder()
-            .url(criticalItemsListUrl)
             .build();
     client = new OkHttpClient();
+  }
+
+  /**
+   * Makes a call for the given type of data, returns
+   * the response.
+   * @param type the type of data (e.g., user info, etc.)
+   * @return the response from the API (may be {@code null})
+   */
+  private Response makeCall(String type) {
+    return makeCall(type, -1);
+  }
+
+  /**
+   * Used to make a call to the API and return
+   * the response. A limit of -1 will make the call without
+   * a limit. The acceptable ranges of limit are otherwise 0-100.
+   * @param type the type of data (e.g., user info, etc.)
+   * @param limit the limit to specify, if any.
+   * @return the response from the API (may be {@code null})
+   */
+  private Response makeCall(String type, int limit) {
+    Response response = null;
+    HttpUrl url = userInformationUrl;
+    if (type.equals(STUDY_QUEUE_STRING)) {
+      url = url.newBuilder()
+                .addPathSegment(STUDY_QUEUE_STRING)
+                .build();
+    } else if (type.equals(LEVEL_PROGRESSION_STRING)) {
+      url = url.newBuilder()
+                .addPathSegment(LEVEL_PROGRESSION_STRING)
+                .build();
+    } else if (type.equals(SRS_DISTRIBUTION_STRING)) {
+      url = url.newBuilder()
+                .addPathSegment(SRS_DISTRIBUTION_STRING)
+                .build();
+    } else if (type.equals(RECENT_UNLOCKS_STRING)) {
+      url = url.newBuilder()
+                .addPathSegment(RECENT_UNLOCKS_STRING)
+                .build();
+    } else if (type.equals(CRITICAL_ITEMS_STRING)) {
+      url = url.newBuilder()
+                .addPathSegment(CRITICAL_ITEMS_STRING)
+                .build();
+    }
+    if (limit != -1) {
+      url = url.newBuilder()
+                .addPathSegment(String.valueOf(limit))
+                .build();
+    }
+    Request request = new Request.Builder()
+                .url(url)
+                .build();
+    try {
+      response = client.newCall(request).execute();
+    } catch (IOException e) {
+      System.out.println("Error reaching API...");
+    }
+    return response;
   }
 
   /**
@@ -202,14 +126,14 @@ public class HttpHandler {
    */
   public UserInformation getUserInformation() {
     UserInformation userInformation = null;
-    try {
-      response = client.newCall(userInformationRequest).execute();
-      if (response.isSuccessful()) {
-        ObjectMapper mapper = new ObjectMapper();
+    Response response = makeCall("");
+    if (response != null && response.isSuccessful()) {
+      ObjectMapper mapper = new ObjectMapper();
+      try {
         userInformation = mapper.readValue(response.body().string(), UserInformation.class);
+      } catch (Exception e) {
+        System.out.println(PROBLEM_PARSING);
       }
-    } catch (IOException e) {
-      System.out.println("Error getting user information");
     }
     return userInformation;
   }
@@ -220,14 +144,14 @@ public class HttpHandler {
    */
   public StudyQueue getStudyQueue() {
     StudyQueue studyQueue = null;
-    try {
-      response = client.newCall(studyQueueRequest).execute();
-      if (response.isSuccessful()) {
-        ObjectMapper mapper = new ObjectMapper();
+    Response response = makeCall(STUDY_QUEUE_STRING);
+    if (response != null && response.isSuccessful()) {
+      ObjectMapper mapper = new ObjectMapper();
+      try {
         studyQueue = mapper.readValue(response.body().string(), StudyQueue.class);
+      } catch (Exception e) {
+        System.out.println(PROBLEM_PARSING);
       }
-    } catch (IOException e) {
-      System.out.println("Error getting study queue");
     }
     return studyQueue;
   }
@@ -238,14 +162,14 @@ public class HttpHandler {
    */
   public LevelProgression getLevelProgression() {
     LevelProgression levelProgression = null;
-    try {
-      response = client.newCall(levelProgressionRequest).execute();
-      if (response.isSuccessful()) {
-        ObjectMapper mapper = new ObjectMapper();
+    Response response = makeCall(LEVEL_PROGRESSION_STRING);
+    if (response != null && response.isSuccessful()) {
+      ObjectMapper mapper = new ObjectMapper();
+      try {
         levelProgression = mapper.readValue(response.body().string(), LevelProgression.class);
+      } catch (Exception e) {
+        System.out.println(PROBLEM_PARSING);
       }
-    } catch (IOException e) {
-      System.out.println("Error getting level progression");
     }
     return levelProgression;
   }
@@ -256,14 +180,14 @@ public class HttpHandler {
    */
   public SrsDistribution getSrsDistribution() {
     SrsDistribution srsDistribution = null;
-    try {
-      response = client.newCall(srsDistributionRequest).execute();
-      if (response.isSuccessful()) {
-        ObjectMapper mapper = new ObjectMapper();
+    Response response = makeCall(SRS_DISTRIBUTION_STRING);
+    if (response != null && response.isSuccessful()) {
+      ObjectMapper mapper = new ObjectMapper();
+      try {
         srsDistribution = mapper.readValue(response.body().string(), SrsDistribution.class);
+      } catch (Exception e) {
+        System.out.println(PROBLEM_PARSING);
       }
-    } catch (IOException e) {
-      System.out.println("Error getting srs distribution");
     }
     return srsDistribution;
   }
@@ -273,17 +197,7 @@ public class HttpHandler {
    * @return recent unlocks list (may be {@code null} if failure)
    */
   public ItemsList getRecentUnlocksList() {
-    ItemsList recentUnlocksList = null;
-    try {
-      response = client.newCall(recentUnlocksListRequest).execute();
-      if (response.isSuccessful()) {
-        ObjectMapper mapper = new ObjectMapper();
-        recentUnlocksList = mapper.readValue(response.body().string(), ItemsList.class);
-      }
-    } catch (IOException e) {
-      System.out.println("Error getting recent unlocks list");
-    }
-    return recentUnlocksList;
+    return getRecentUnlocksList(-1);
   }
 
   /**
@@ -291,35 +205,25 @@ public class HttpHandler {
    * Specified limit must be between 1 and 100.
    * @return recent unlocks list (may be {@code null} if failure)
    */
-  public ItemsList getRecentUnlocksList(int limit, String key) {
+  public ItemsList getRecentUnlocksList(int limit) {
     ItemsList recentUnlocksList = null;
     // fail if limit was bad
-    if (limit < 1 || limit > 100) {
+    if ((limit != -1) && (limit < 1 || limit > 100)) {
       return null;
     }
-    // have to construct a new URL with the new limit
-    recentUnlocksListWithLimitUrl = new HttpUrl.Builder()
-            .scheme(SCHEME)
-            .host(HOST)
-            .addPathSegment(API_STRING)
-            .addPathSegment(USER_STRING)
-            .addPathSegment(key)
-            .addPathSegment(RECENT_UNLOCKS_STRING)
-            .addPathSegment(String.valueOf(limit))
-            .build();
-    if (recentUnlocksListRequestWithLimit == null) {
-      recentUnlocksListRequestWithLimit = new Request.Builder()
-            .url(recentUnlocksListWithLimitUrl)
-            .build();
+    Response response;
+    if (limit == -1) {
+      response = makeCall(RECENT_UNLOCKS_STRING);
+    } else {
+      response = makeCall(RECENT_UNLOCKS_STRING, limit);
     }
-    try {
-      response = client.newCall(recentUnlocksListRequestWithLimit).execute();
-      if (response.isSuccessful()) {
-        ObjectMapper mapper = new ObjectMapper();
+    if (response != null && response.isSuccessful()) {
+      ObjectMapper mapper = new ObjectMapper();
+      try {
         recentUnlocksList = mapper.readValue(response.body().string(), ItemsList.class);
+      } catch (Exception e) {
+        System.out.println(PROBLEM_PARSING);
       }
-    } catch (IOException e) {
-      System.out.println("Error getting recent unlocks list");
     }
     return recentUnlocksList;
   }
@@ -329,17 +233,7 @@ public class HttpHandler {
    * @return critical items list (may be {@code null} if failure)
    */
   public ItemsList getCriticalItemsList() {
-    ItemsList criticalItemsList = null;
-    try {
-      response = client.newCall(criticalItemsListRequest).execute();
-      if (response.isSuccessful()) {
-        ObjectMapper mapper = new ObjectMapper();
-        criticalItemsList = mapper.readValue(response.body().string(), ItemsList.class);
-      }
-    } catch (IOException e) {
-      System.out.println("Error getting critical items list");
-    }
-    return criticalItemsList;
+    return getCriticalItemsList(-1);
   }
 
   /**
@@ -347,35 +241,25 @@ public class HttpHandler {
    * Specified limit must be between 0 and 100.
    * @return critical items list (may be {@code null} if failure)
    */
-  public ItemsList getCriticalItemsList(int limit, String key) {
+  public ItemsList getCriticalItemsList(int limit) {
     ItemsList criticalItemsList = null;
     // fail if limit was bad
-    if (limit < 0 || limit > 100) {
+    if ((limit != -1) && (limit < 0 || limit > 100)) {
       return null;
     }
-    // have to construct a new URL with the new limit
-    criticalItemsListWithLimitUrl = new HttpUrl.Builder()
-            .scheme(SCHEME)
-            .host(HOST)
-            .addPathSegment(API_STRING)
-            .addPathSegment(USER_STRING)
-            .addPathSegment(key)
-            .addPathSegment(CRITICAL_ITEMS_STRING)
-            .addPathSegment(String.valueOf(limit))
-            .build();
-    if (criticalItemsListRequestWithLimit == null) {
-        criticalItemsListRequestWithLimit = new Request.Builder()
-            .url(criticalItemsListWithLimitUrl)
-            .build();
+    Response response;
+    if (limit == -1) {
+      response = makeCall(CRITICAL_ITEMS_STRING);
+    } else {
+      response = makeCall(CRITICAL_ITEMS_STRING, limit);
     }
-    try {
-      response = client.newCall(recentUnlocksListRequestWithLimit).execute();
-      if (response.isSuccessful()) {
-        ObjectMapper mapper = new ObjectMapper();
+    if (response != null && response.isSuccessful()) {
+      ObjectMapper mapper = new ObjectMapper();
+      try {
         criticalItemsList = mapper.readValue(response.body().string(), ItemsList.class);
+      } catch (Exception e) {
+        System.out.println(PROBLEM_PARSING);
       }
-    } catch (IOException e) {
-      System.out.println("Error getting critical items list");
     }
     return criticalItemsList;
   }
