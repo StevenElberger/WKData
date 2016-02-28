@@ -2,6 +2,7 @@ package com.steve.wkdata;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
@@ -10,6 +11,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.Test;
 
 import java.io.IOException;
+import java.util.Optional;
 
 public class MockServiceTest {
 
@@ -22,11 +24,11 @@ public class MockServiceTest {
                                                         WaniKaniUser.class);
 
     // ACT
-    UserInformation userInformation = wkr.getUserInformation();
+    Optional<UserInformation> userInformation = wkr.getUserInformation();
 
     // ASSERT
-    assertNotNull(userInformation);
-    assertEquals(userInformation.getUsername(), "BSheep");
+    assertTrue(userInformation.isPresent());
+    assertEquals(userInformation.get().getUsername(), "BSheep");
   }
 
   @Test
@@ -37,11 +39,11 @@ public class MockServiceTest {
     WaniKaniUser wkr = mapper.readValue(MockService.getStudyQueue(), WaniKaniUser.class);
 
     // ACT
-    StudyQueue studyQueue = wkr.getStudyQueue();
+    Optional<StudyQueue> studyQueue = wkr.getStudyQueue();
 
     // ASSERT
-    assertNotNull(studyQueue);
-    assertEquals(studyQueue.getReviewsAvailable(), 136);
+    assertTrue(studyQueue.isPresent());
+    assertEquals(studyQueue.get().getReviewsAvailable(), 136);
   }
 
   @Test
@@ -52,11 +54,11 @@ public class MockServiceTest {
     WaniKaniUser wkr = mapper.readValue(MockService.getLevelProgression(), WaniKaniUser.class);
 
     // ACT
-    LevelProgression levelProgression = wkr.getLevelProgression();
+    Optional<LevelProgression> levelProgression = wkr.getLevelProgression();
 
     // ASSERT
-    assertNotNull(levelProgression);
-    assertEquals(levelProgression.getKanjiProgress(), 6);
+    assertTrue(levelProgression.isPresent());
+    assertEquals(levelProgression.get().getKanjiProgress(), 6);
   }
 
   @Test
@@ -67,14 +69,14 @@ public class MockServiceTest {
     WaniKaniUser wkr = mapper.readValue(MockService.getSrsDistribution(), WaniKaniUser.class);
 
     // ACT
-    SrsDistribution srsDistribution = wkr.getSrsDistribution();
+    Optional<SrsDistribution> srsDistribution = wkr.getSrsDistribution();
 
     // ASSERT
-    assertNotNull(srsDistribution);
-    assertNotNull(srsDistribution.getApprentice());
-    assertEquals(srsDistribution.getApprentice().getRadicals(), 1);
-    assertEquals(srsDistribution.getApprentice().getKanji(), 38);
-    assertEquals(srsDistribution.getApprentice().getVocabulary(), 117);
-    assertEquals(srsDistribution.getApprentice().getTotal(), 156);
+    assertTrue(srsDistribution.isPresent());
+    assertNotNull(srsDistribution.get().getApprentice());
+    assertEquals(srsDistribution.get().getApprentice().getRadicals(), 1);
+    assertEquals(srsDistribution.get().getApprentice().getKanji(), 38);
+    assertEquals(srsDistribution.get().getApprentice().getVocabulary(), 117);
+    assertEquals(srsDistribution.get().getApprentice().getTotal(), 156);
   }
 }

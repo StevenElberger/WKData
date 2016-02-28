@@ -1,6 +1,7 @@
 package com.steve.wkdata;
 
 import java.util.Date;
+import java.util.Optional;
 import java.util.Scanner;
 
 /**
@@ -83,8 +84,9 @@ public class Main {
    * Prints the user's user information.
    */
   public static void printUserInformation() {
-    UserInformation userInfo = user.getUserInformation();
-    if (userInfo != null) {
+    Optional<UserInformation> userInfoResponse = user.getUserInformation();
+    if (userInfoResponse.isPresent()) {
+      UserInformation userInfo = userInfoResponse.get();
       System.out.println("Displaying user information:");
       System.out.println("Last refreshed: " + new Date(userInfo.getLastRefreshed()));
       System.out.println("Username: " + userInfo.getUsername());
@@ -113,8 +115,9 @@ public class Main {
    * Prints the user's study queue.
    */
   public static void printStudyQueue() {
-    StudyQueue studyQueue = user.getStudyQueue();
-    if (studyQueue != null) {
+    Optional<StudyQueue> studyQueueResponse = user.getStudyQueue();
+    if (studyQueueResponse.isPresent()) {
+      StudyQueue studyQueue = studyQueueResponse.get();
       System.out.println("Displaying study queue:");
       System.out.println("Last refreshed: " + new Date(studyQueue.getLastRefreshed()));
       System.out.println("Lessons available: " + studyQueue.getLessonsAvailable());
@@ -133,8 +136,9 @@ public class Main {
    * Prints the user's level progression.
    */
   public static void printLevelProgression() {
-    LevelProgression levelProgression = user.getLevelProgression();
-    if (levelProgression != null) {
+    Optional<LevelProgression> levelProgressionResponse = user.getLevelProgression();
+    if (levelProgressionResponse.isPresent()) {
+      LevelProgression levelProgression = levelProgressionResponse.get();
       System.out.println("Displaying level progression:");
       System.out.println("Last refreshed: " + new Date(levelProgression.getLastRefreshed()));
       System.out.println("Radicals progress: " + levelProgression.getRadicalsProgress());
@@ -148,8 +152,9 @@ public class Main {
    * Prints the user's SRS distribution.
    */
   public static void printSrsDistribution() {
-    SrsDistribution srsDistribution = user.getSrsDistribution();
-    if (srsDistribution != null) {
+    Optional<SrsDistribution> srsDistributionResponse = user.getSrsDistribution();
+    if (srsDistributionResponse.isPresent()) {
+      SrsDistribution srsDistribution = srsDistributionResponse.get();
       System.out.println("Displaying srs distribution:");
       System.out.println("Last refreshed: " + new Date(srsDistribution.getLastRefreshed()));
       System.out.println("Apprentice---");
@@ -184,8 +189,9 @@ public class Main {
    * Prints the user's recent unlocks list.
    */
   public static void printRecentUnlocksList() {
-    ItemsList recentUnlocksList = user.getRecentUnlocksList();
-    if (recentUnlocksList != null) {
+    Optional<ItemsList> recentUnlocksListResponse = user.getRecentUnlocksList();
+    if (recentUnlocksListResponse.isPresent()) {
+      ItemsList recentUnlocksList = recentUnlocksListResponse.get();
       System.out.println("Display recent unlocks list:");
       System.out.println("Last refreshed: " + new Date(recentUnlocksList.getLastRefreshed()));
       Item[] itemList = recentUnlocksList.getList();
@@ -224,8 +230,9 @@ public class Main {
    * Prints the user's critical items list.
    */
   public static void printCriticalItemsList() {
-    ItemsList criticalItemsList = user.getCriticalItemsList();
-    if (criticalItemsList != null) {
+    Optional<ItemsList> criticalItemsListResponse = user.getCriticalItemsList();
+    if (criticalItemsListResponse.isPresent()) {
+      ItemsList criticalItemsList = criticalItemsListResponse.get();
       System.out.println("Display recent unlocks list:");
       System.out.println("Last refreshed: " + new Date(criticalItemsList.getLastRefreshed()));
       Item[] itemList = criticalItemsList.getList();

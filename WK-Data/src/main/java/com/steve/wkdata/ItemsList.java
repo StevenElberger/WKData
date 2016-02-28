@@ -8,7 +8,7 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
  * @author Steve
  */
 @JsonDeserialize(using = ItemsListDeserializer.class)
-public class ItemsList {
+public class ItemsList implements Expirable {
   /**
    * The expiration time limit for this object. Set to 1 hour.
    */
@@ -37,6 +37,7 @@ public class ItemsList {
    * Checks if the data has expired.
    * @return true if expired, false otherwise
    */
+  @Override
   public boolean isExpired() {
     return System.currentTimeMillis() - EXPIRATION_TIME >= lastRefreshed;
   }

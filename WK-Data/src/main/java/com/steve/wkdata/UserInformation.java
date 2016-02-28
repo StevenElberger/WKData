@@ -9,11 +9,11 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
  * @author Steve
  */
 @JsonDeserialize(using = UserInformationDeserializer.class)
-public class UserInformation {
+public class UserInformation implements Expirable {
   /**
-   * The expiration time limit for this object. Set to 12 hours.
+   * The expiration time limit for this object. Set to 1 hour.
    */
-  private static final long EXPIRATION_TIME = 12 * 60 * 60 * 1000;
+  private static final long EXPIRATION_TIME = 60 * 60 * 1000;
   /**
    * The timestamp of the last time this object was refreshed with new data.
    */
@@ -112,6 +112,7 @@ public class UserInformation {
    * Checks if the data has expired.
    * @return true if expired, false otherwise
    */
+  @Override
   public boolean isExpired() {
     return System.currentTimeMillis() - EXPIRATION_TIME >= lastRefreshed;
   }

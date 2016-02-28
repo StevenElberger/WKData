@@ -83,31 +83,15 @@ public class HttpHandler {
   private Response makeCall(String type, int limit) {
     Response response = null;
     HttpUrl url = userInformationUrl;
-    if (type.equals(STUDY_QUEUE_STRING)) {
+    if (!type.equals("")) { // empty string for user info
       url = url.newBuilder()
-                .addPathSegment(STUDY_QUEUE_STRING)
-                .build();
-    } else if (type.equals(LEVEL_PROGRESSION_STRING)) {
-      url = url.newBuilder()
-                .addPathSegment(LEVEL_PROGRESSION_STRING)
-                .build();
-    } else if (type.equals(SRS_DISTRIBUTION_STRING)) {
-      url = url.newBuilder()
-                .addPathSegment(SRS_DISTRIBUTION_STRING)
-                .build();
-    } else if (type.equals(RECENT_UNLOCKS_STRING)) {
-      url = url.newBuilder()
-                .addPathSegment(RECENT_UNLOCKS_STRING)
-                .build();
-    } else if (type.equals(CRITICAL_ITEMS_STRING)) {
-      url = url.newBuilder()
-                .addPathSegment(CRITICAL_ITEMS_STRING)
-                .build();
+              .addPathSegment(type)
+              .build();
     }
     if (limit != -1) {
       url = url.newBuilder()
-                .addPathSegment(String.valueOf(limit))
-                .build();
+              .addPathSegment(String.valueOf(limit))
+              .build();
     }
     Request request = new Request.Builder()
                 .url(url)
@@ -208,7 +192,7 @@ public class HttpHandler {
   public ItemsList getRecentUnlocksList(int limit) {
     ItemsList recentUnlocksList = null;
     // fail if limit was bad
-    if ((limit != -1) && (limit < 1 || limit > 100)) {
+    if ((limit < 0 && limit != -1) || limit > 100) {
       return null;
     }
     Response response;
@@ -244,7 +228,7 @@ public class HttpHandler {
   public ItemsList getCriticalItemsList(int limit) {
     ItemsList criticalItemsList = null;
     // fail if limit was bad
-    if ((limit != -1) && (limit < 0 || limit > 100)) {
+    if ((limit < 0 && limit != -1) || limit > 100) {
       return null;
     }
     Response response;

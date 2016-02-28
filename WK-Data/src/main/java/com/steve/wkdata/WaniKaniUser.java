@@ -1,5 +1,7 @@
 package com.steve.wkdata;
 
+import java.util.Optional;
+
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
@@ -12,7 +14,7 @@ public class WaniKaniUser {
   /**
    * The HttpHandler object which makes calls to the API.
    */
-  HttpHandler httpHandler;
+  private HttpHandler httpHandler;
   /**
    * The user's API key.
    */
@@ -21,32 +23,32 @@ public class WaniKaniUser {
    * An object containing the user's information.
    */
   @JsonProperty("user_information")
-  private UserInformation userInformation;
+  private Optional<UserInformation> userInformation;
   /**
    * An object containing the user's study queue.
    */
   @JsonProperty("study_queue")
-  private StudyQueue studyQueue;
+  private Optional<StudyQueue> studyQueue;
   /**
    * An object containing the user's level progression.
    */
   @JsonProperty("level_progression")
-  private LevelProgression levelProgression;
+  private Optional<LevelProgression> levelProgression;
   /**
    * An object containing the user's SRS distribution.
    */
   @JsonProperty("srs_distribution")
-  private SrsDistribution srsDistribution;
+  private Optional<SrsDistribution> srsDistribution;
   /**
    * An object containing the user's recent unlocks list.
    */
   @JsonProperty("recent_unlocks")
-  private ItemsList recentUnlocksList;
+  private Optional<ItemsList> recentUnlocksList;
   /**
    * An object containing the user's critical items list.
    */
   @JsonProperty("critical_items")
-  private ItemsList criticalItemsList;
+  private Optional<ItemsList> criticalItemsList;
 
   /**
    * Constructor.
@@ -65,15 +67,11 @@ public class WaniKaniUser {
    * Retrieves the user's user information.
    * If the data is nonexistent or expired, the data
    * will be retrieved and returned from the API.
-   * @return the user's user information (may be {@code null})
+   * @return the user's user information
    */
-  public UserInformation getUserInformation() {
-    if (userInformation == null || (userInformation != null && userInformation.isExpired())) {
-      UserInformation response = httpHandler.getUserInformation();
-      // check for failure (return what we have already if failed)
-      if (response != null) {
-        userInformation = response;
-      }
+  public Optional<UserInformation> getUserInformation() {
+    if (!userInformation.isPresent() || userInformation.get().isExpired()) {
+      userInformation = Optional.ofNullable(httpHandler.getUserInformation());
     }
     return userInformation;
   }
@@ -82,15 +80,11 @@ public class WaniKaniUser {
    * Retrieve's the user's study queue.
    * If the data is nonexistent or expired, the data
    * will be retrieved and returned from the API.
-   * @return the user's study queue (may be {@code null})
+   * @return the user's study queue
    */
-  public StudyQueue getStudyQueue() {
-    if (studyQueue == null || (studyQueue != null && studyQueue.isExpired())) {
-      StudyQueue response = httpHandler.getStudyQueue();
-      // check for failure (return what we have already if failed)
-      if (response != null) {
-        studyQueue = response;
-      }
+  public Optional<StudyQueue> getStudyQueue() {
+    if (!studyQueue.isPresent() || studyQueue.get().isExpired()) {
+      studyQueue = Optional.ofNullable(httpHandler.getStudyQueue());
     }
     return studyQueue;
   }
@@ -99,15 +93,11 @@ public class WaniKaniUser {
    * Retrieve's the user's level progression.
    * If the data is nonexistent or expired, the data
    * will be retrieved and returned from the API.
-   * @return the user's level progression (may be {@code null})
+   * @return the user's level progression
    */
-  public LevelProgression getLevelProgression() {
-    if (levelProgression == null || (levelProgression != null && levelProgression.isExpired())) {
-      LevelProgression response = httpHandler.getLevelProgression();
-      // check for failure (return what we have already if failed)
-      if (response != null) {
-        levelProgression = response;
-      }
+  public Optional<LevelProgression> getLevelProgression() {
+    if (!levelProgression.isPresent() || levelProgression.get().isExpired()) {
+      levelProgression = Optional.ofNullable(httpHandler.getLevelProgression());
     }
     return levelProgression;
   }
@@ -116,15 +106,11 @@ public class WaniKaniUser {
    * Retrieve's the user's SRS distribution.
    * If the data is nonexistent or expired, the data
    * will be retrieved and returned from the API.
-   * @return the user's SRS distribution (may be {@code null})
+   * @return the user's SRS distribution
    */
-  public SrsDistribution getSrsDistribution() {
-    if (srsDistribution == null || (srsDistribution != null && srsDistribution.isExpired())) {
-      SrsDistribution response = httpHandler.getSrsDistribution();
-      // check for failure (return what we have already if failed)
-      if (response != null) {
-        srsDistribution = response;
-      }
+  public Optional<SrsDistribution> getSrsDistribution() {
+    if (!srsDistribution.isPresent() || srsDistribution.get().isExpired()) {
+      srsDistribution = Optional.ofNullable(httpHandler.getSrsDistribution());
     }
     return srsDistribution;
   }
@@ -133,9 +119,9 @@ public class WaniKaniUser {
    * Retrieve's the user's recent unlocks list.
    * If the data is nonexistent or expired, the data
    * will be retrieved and returned from the API.
-   * @return the user's recent unlocks list (may be {@code null})
+   * @return the user's recent unlocks list
    */
-  public ItemsList getRecentUnlocksList() {
+  public Optional<ItemsList> getRecentUnlocksList() {
     return getRecentUnlocksList(-1);
   }
 
@@ -144,19 +130,14 @@ public class WaniKaniUser {
    * If the data is nonexistent or expired, the data
    * will be retrieved and returned from the API.
    * Limit must be within 1 and 100.
-   * @return the user's recent unlocks list (may be {@code null})
+   * @return the user's recent unlocks list
    */
-  public ItemsList getRecentUnlocksList(int limit) {
-    if (recentUnlocksList == null || (recentUnlocksList != null && recentUnlocksList.isExpired())) {
-      ItemsList response;
+  public Optional<ItemsList> getRecentUnlocksList(int limit) {
+    if (!recentUnlocksList.isPresent() || recentUnlocksList.get().isExpired()) {
       if (limit == -1) {
-        response = httpHandler.getRecentUnlocksList();
+        recentUnlocksList = Optional.ofNullable(httpHandler.getRecentUnlocksList());
       } else {
-        response = httpHandler.getRecentUnlocksList(limit);
-      }
-      // check for failure (return what we have already if failed)
-      if (response != null) {
-        recentUnlocksList = response;
+        recentUnlocksList = Optional.ofNullable(httpHandler.getRecentUnlocksList(limit));
       }
     }
     return recentUnlocksList;
@@ -166,9 +147,9 @@ public class WaniKaniUser {
    * Retrieve's the user's recent unlocks list.
    * If the data is nonexistent or expired, the data
    * will be retrieved and returned from the API.
-   * @return the user's recent unlocks list (may be {@code null})
+   * @return the user's recent unlocks list
    */
-  public ItemsList getCriticalItemsList() {
+  public Optional<ItemsList> getCriticalItemsList() {
     return getCriticalItemsList(-1);
   }
 
@@ -177,19 +158,14 @@ public class WaniKaniUser {
    * If the data is nonexistent or expired, the data
    * will be retrieved and returned from the API.
    * Limit must be within 1 and 100.
-   * @return the user's recent unlocks list (may be {@code null})
+   * @return the user's recent unlocks list
    */
-  public ItemsList getCriticalItemsList(int limit) {
-    if (criticalItemsList == null || (criticalItemsList != null && criticalItemsList.isExpired())) {
-      ItemsList response;
+  public Optional<ItemsList> getCriticalItemsList(int limit) {
+    if (!criticalItemsList.isPresent() || criticalItemsList.get().isExpired()) {
       if (limit == -1) {
-        response = httpHandler.getCriticalItemsList();
+        criticalItemsList = Optional.ofNullable(httpHandler.getCriticalItemsList());
       } else {
-        response = httpHandler.getCriticalItemsList(limit);
-      }
-      // check for failure (return what we have already if failed)
-      if (response != null) {
-        criticalItemsList = response;
+        criticalItemsList = Optional.ofNullable(httpHandler.getCriticalItemsList(limit));
       }
     }
     return recentUnlocksList;

@@ -8,7 +8,7 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
  * @author Steve
  */
 @JsonDeserialize(using = SrsDistributionDeserializer.class)
-public class SrsDistribution {
+public class SrsDistribution implements Expirable {
   /**
    * The expiration time limit for this object. Set to 1 hour.
    */
@@ -55,6 +55,7 @@ public class SrsDistribution {
    * Checks if the data has expired.
    * @return true if expired, false otherwise
    */
+  @Override
   public boolean isExpired() {
     return System.currentTimeMillis() - EXPIRATION_TIME >= lastRefreshed;
   }
