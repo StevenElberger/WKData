@@ -11,16 +11,12 @@ public class RecentUnlocksList extends ItemsList {
     super(list, lastRefreshed);
   }
 
-  public interface RecentUnlockItem {
-    long getUnlockDate();
-  }
-
   /**
    * Class for recent unlock list vocabulary items which
    * includes an unlock date.
    * @author Steve
    */
-  public static class RecentUnlockVocabulary extends Vocabulary implements RecentUnlockItem {
+  public static class RecentUnlockVocabulary extends Vocabulary {
     /**
      * The date at which this item was unlocked.
      */
@@ -32,7 +28,6 @@ public class RecentUnlocksList extends ItemsList {
       this.unlockDate = unlockDate;
     }
 
-    @Override
     public long getUnlockDate() {
       return unlockDate;
     }
@@ -43,7 +38,7 @@ public class RecentUnlocksList extends ItemsList {
    * includes an unlock date.
    * @author Steve
    */
-  public static class RecentUnlockRadical extends Radical implements RecentUnlockItem {
+  public static class RecentUnlockRadical extends Radical {
     /**
      * The date at which this item was unlocked.
      */
@@ -55,7 +50,6 @@ public class RecentUnlocksList extends ItemsList {
       this.unlockDate = unlockDate;
     }
 
-    @Override
     public long getUnlockDate() {
       return unlockDate;
     }
@@ -66,7 +60,7 @@ public class RecentUnlocksList extends ItemsList {
    * includes an unlock date.
    * @author Steve
    */
-  public static class RecentUnlockKanji extends Kanji implements RecentUnlockItem {
+  public static class RecentUnlockKanji extends Kanji {
     /**
      * The date at which this item was unlocked.
      */
@@ -79,7 +73,6 @@ public class RecentUnlocksList extends ItemsList {
       this.unlockDate = unlockDate;
     }
 
-    @Override
     public long getUnlockDate() {
       return unlockDate;
     }
