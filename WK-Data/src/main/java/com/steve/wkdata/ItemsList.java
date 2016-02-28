@@ -1,14 +1,13 @@
 package com.steve.wkdata;
 
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import java.util.ArrayList;
 
 /**
  * The list of items (recent unlocks or critical).
  * Consists of radicals, kanji, or vocabulary items.
  * @author Steve
  */
-@JsonDeserialize(using = ItemsListDeserializer.class)
-public class ItemsList implements Expirable {
+public abstract class ItemsList implements Expirable {
   /**
    * The expiration time limit for this object. Set to 1 hour.
    */
@@ -21,14 +20,14 @@ public class ItemsList implements Expirable {
    * The list of items.
    * Can be radicals, kanji, or vocabulary items.
    */
-  private Item[] list;
+  private ArrayList<Item> list;
 
   /**
    * Constructor.
    * @param list the list of items
    * @param lastRefreshed the time this object was constructed (expiration purposes)
    */
-  public ItemsList(Item[] list, long lastRefreshed) {
+  public ItemsList(ArrayList<Item> list, long lastRefreshed) {
     this.list = list;
     this.lastRefreshed = lastRefreshed;
   }
@@ -46,7 +45,7 @@ public class ItemsList implements Expirable {
     return lastRefreshed;
   }
 
-  public Item[] getList() {
+  public ArrayList<Item> getList() {
     return list;
   }
 }

@@ -43,12 +43,12 @@ public class WaniKaniUser {
    * An object containing the user's recent unlocks list.
    */
   @JsonProperty("recent_unlocks")
-  private Optional<ItemsList> recentUnlocksList;
+  private Optional<RecentUnlocksList> recentUnlocksList;
   /**
    * An object containing the user's critical items list.
    */
   @JsonProperty("critical_items")
-  private Optional<ItemsList> criticalItemsList;
+  private Optional<CriticalItemsList> criticalItemsList;
 
   /**
    * Constructor.
@@ -57,6 +57,12 @@ public class WaniKaniUser {
   public WaniKaniUser(String key) {
     this.key = key;
     httpHandler = new HttpHandler(key);
+    userInformation = Optional.empty();
+    studyQueue = Optional.empty();
+    levelProgression = Optional.empty();
+    srsDistribution = Optional.empty();
+    recentUnlocksList = Optional.empty();
+    criticalItemsList = Optional.empty();
   }
 
   public String getKey() {
@@ -121,7 +127,7 @@ public class WaniKaniUser {
    * will be retrieved and returned from the API.
    * @return the user's recent unlocks list
    */
-  public Optional<ItemsList> getRecentUnlocksList() {
+  public Optional<RecentUnlocksList> getRecentUnlocksList() {
     return getRecentUnlocksList(-1);
   }
 
@@ -132,7 +138,7 @@ public class WaniKaniUser {
    * Limit must be within 1 and 100.
    * @return the user's recent unlocks list
    */
-  public Optional<ItemsList> getRecentUnlocksList(int limit) {
+  public Optional<RecentUnlocksList> getRecentUnlocksList(int limit) {
     if (!recentUnlocksList.isPresent() || recentUnlocksList.get().isExpired()) {
       if (limit == -1) {
         recentUnlocksList = Optional.ofNullable(httpHandler.getRecentUnlocksList());
@@ -149,7 +155,7 @@ public class WaniKaniUser {
    * will be retrieved and returned from the API.
    * @return the user's recent unlocks list
    */
-  public Optional<ItemsList> getCriticalItemsList() {
+  public Optional<CriticalItemsList> getCriticalItemsList() {
     return getCriticalItemsList(-1);
   }
 
@@ -160,7 +166,7 @@ public class WaniKaniUser {
    * Limit must be within 1 and 100.
    * @return the user's recent unlocks list
    */
-  public Optional<ItemsList> getCriticalItemsList(int limit) {
+  public Optional<CriticalItemsList> getCriticalItemsList(int limit) {
     if (!criticalItemsList.isPresent() || criticalItemsList.get().isExpired()) {
       if (limit == -1) {
         criticalItemsList = Optional.ofNullable(httpHandler.getCriticalItemsList());
@@ -168,6 +174,6 @@ public class WaniKaniUser {
         criticalItemsList = Optional.ofNullable(httpHandler.getCriticalItemsList(limit));
       }
     }
-    return recentUnlocksList;
+    return criticalItemsList;
   }
 }

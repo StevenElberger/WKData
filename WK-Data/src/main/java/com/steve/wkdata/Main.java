@@ -1,5 +1,6 @@
 package com.steve.wkdata;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.Optional;
 import java.util.Scanner;
@@ -189,32 +190,37 @@ public class Main {
    * Prints the user's recent unlocks list.
    */
   public static void printRecentUnlocksList() {
-    Optional<ItemsList> recentUnlocksListResponse = user.getRecentUnlocksList();
+    Optional<RecentUnlocksList> recentUnlocksListResponse = user.getRecentUnlocksList();
     if (recentUnlocksListResponse.isPresent()) {
       ItemsList recentUnlocksList = recentUnlocksListResponse.get();
       System.out.println("Display recent unlocks list:");
       System.out.println("Last refreshed: " + new Date(recentUnlocksList.getLastRefreshed()));
-      Item[] itemList = recentUnlocksList.getList();
-      for (int i = 0; i < itemList.length; i++) {
-        String type = itemList[i].getType();
+      ArrayList<Item> itemList = recentUnlocksList.getList();
+      for (int i = 0; i < itemList.size(); i++) {
+        String type = itemList.get(i).getType();
         System.out.println("Type: " + type);
-        System.out.println("Character: " + itemList[i].getCharacter());
-        String[] meanings = itemList[i].getMeaning();
+        System.out.println("Character: " + itemList.get(i).getCharacter());
+        String[] meanings = itemList.get(i).getMeaning();
         for (int j = 0; j < meanings.length; j++) {
           System.out.println("Meaning[" + j + "]: " + meanings[j]);
         }
-        System.out.println("Level: " + itemList[i].getLevel());
-        System.out.println("Unlocked date: " + new Date(itemList[i].getUnlockedDate()));
+        System.out.println("Level: " + itemList.get(i).getLevel());
         if (type.equals("vocabulary")) {
-          Vocabulary item = (Vocabulary) itemList[i];
+          RecentUnlocksList.RecentUnlockVocabulary item = 
+                  (RecentUnlocksList.RecentUnlockVocabulary) itemList.get(i);
+          System.out.println("Unlocked date: " + new Date(item.getUnlockDate()));
           System.out.println("Kana: " + item.getKana());
         } else if (type.equals("Radical")) {
-          Radical item = (Radical) itemList[i];
+          RecentUnlocksList.RecentUnlockRadical item = 
+                  (RecentUnlocksList.RecentUnlockRadical) itemList.get(i);
+          System.out.println("Unlocked date: " + new Date(item.getUnlockDate()));
           if (item.getImage() != null) {
             System.out.println("Image: " + item.getImage());
           }
         } else if (type.equals("Kanji")) {
-          Kanji item = (Kanji) itemList[i];
+          RecentUnlocksList.RecentUnlockKanji item = 
+                  (RecentUnlocksList.RecentUnlockKanji) itemList.get(i);
+          System.out.println("Unlocked date: " + new Date(item.getUnlockDate()));
           System.out.println("On'yomi: " + item.getOnyomi());
           if (item.getKunyomi() != null) {
             System.out.println("Kun'yomi: " + item.getKunyomi());
@@ -230,32 +236,37 @@ public class Main {
    * Prints the user's critical items list.
    */
   public static void printCriticalItemsList() {
-    Optional<ItemsList> criticalItemsListResponse = user.getCriticalItemsList();
+    Optional<CriticalItemsList> criticalItemsListResponse = user.getCriticalItemsList();
     if (criticalItemsListResponse.isPresent()) {
-      ItemsList criticalItemsList = criticalItemsListResponse.get();
+        CriticalItemsList criticalItemsList = criticalItemsListResponse.get();
       System.out.println("Display recent unlocks list:");
       System.out.println("Last refreshed: " + new Date(criticalItemsList.getLastRefreshed()));
-      Item[] itemList = criticalItemsList.getList();
-      for (int i = 0; i < itemList.length; i++) {
-        String type = itemList[i].getType();
+      ArrayList<Item> itemList = criticalItemsList.getList();
+      for (int i = 0; i < itemList.size(); i++) {
+        String type = itemList.get(i).getType();
         System.out.println("Type: " + type);
-        System.out.println("Character: " + itemList[i].getCharacter());
-        String[] meanings = itemList[i].getMeaning();
+        System.out.println("Character: " + itemList.get(i).getCharacter());
+        String[] meanings = itemList.get(i).getMeaning();
         for (int j = 0; j < meanings.length; j++) {
           System.out.println("Meaning[" + j + "]: " + meanings[j]);
         }
-        System.out.println("Level: " + itemList[i].getLevel());
-        System.out.println("Percentage: " + itemList[i].getPercentage());
+        System.out.println("Level: " + itemList.get(i).getLevel());
         if (type.equals("vocabulary")) {
-          Vocabulary item = (Vocabulary) itemList[i];
+          CriticalItemsList.CriticalVocabulary item = 
+                  (CriticalItemsList.CriticalVocabulary) itemList.get(i);
+          System.out.println("Percentage: " + item.getPercentage());
           System.out.println("Kana: " + item.getKana());
         } else if (type.equals("Radical")) {
-          Radical item = (Radical) itemList[i];
+          CriticalItemsList.CriticalRadical item = 
+                  (CriticalItemsList.CriticalRadical) itemList.get(i);
+          System.out.println("Percentage: " + item.getPercentage());
           if (item.getImage() != null) {
             System.out.println("Image: " + item.getImage());
           }
         } else if (type.equals("Kanji")) {
-          Kanji item = (Kanji) itemList[i];
+          CriticalItemsList.CriticalKanji item = 
+                  (CriticalItemsList.CriticalKanji) itemList.get(i);
+          System.out.println("Percentage: " + item.getPercentage());
           System.out.println("On'yomi: " + item.getOnyomi());
           if (item.getKunyomi() != null) {
             System.out.println("Kun'yomi: " + item.getKunyomi());

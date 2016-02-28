@@ -180,7 +180,7 @@ public class HttpHandler {
    * Makes a call to the API to get the user's recent unlocks list.
    * @return recent unlocks list (may be {@code null} if failure)
    */
-  public ItemsList getRecentUnlocksList() {
+  public RecentUnlocksList getRecentUnlocksList() {
     return getRecentUnlocksList(-1);
   }
 
@@ -189,8 +189,8 @@ public class HttpHandler {
    * Specified limit must be between 1 and 100.
    * @return recent unlocks list (may be {@code null} if failure)
    */
-  public ItemsList getRecentUnlocksList(int limit) {
-    ItemsList recentUnlocksList = null;
+  public RecentUnlocksList getRecentUnlocksList(int limit) {
+      RecentUnlocksList recentUnlocksList = null;
     // fail if limit was bad
     if ((limit < 0 && limit != -1) || limit > 100) {
       return null;
@@ -204,7 +204,7 @@ public class HttpHandler {
     if (response != null && response.isSuccessful()) {
       ObjectMapper mapper = new ObjectMapper();
       try {
-        recentUnlocksList = mapper.readValue(response.body().string(), ItemsList.class);
+        recentUnlocksList = mapper.readValue(response.body().string(), RecentUnlocksList.class);
       } catch (Exception e) {
         System.out.println(PROBLEM_PARSING);
       }
@@ -216,7 +216,7 @@ public class HttpHandler {
    * Makes a call to the API to get the user's critical items list.
    * @return critical items list (may be {@code null} if failure)
    */
-  public ItemsList getCriticalItemsList() {
+  public CriticalItemsList getCriticalItemsList() {
     return getCriticalItemsList(-1);
   }
 
@@ -225,8 +225,8 @@ public class HttpHandler {
    * Specified limit must be between 0 and 100.
    * @return critical items list (may be {@code null} if failure)
    */
-  public ItemsList getCriticalItemsList(int limit) {
-    ItemsList criticalItemsList = null;
+  public CriticalItemsList getCriticalItemsList(int limit) {
+    CriticalItemsList criticalItemsList = null;
     // fail if limit was bad
     if ((limit < 0 && limit != -1) || limit > 100) {
       return null;
@@ -240,7 +240,7 @@ public class HttpHandler {
     if (response != null && response.isSuccessful()) {
       ObjectMapper mapper = new ObjectMapper();
       try {
-        criticalItemsList = mapper.readValue(response.body().string(), ItemsList.class);
+        criticalItemsList = mapper.readValue(response.body().string(), CriticalItemsList.class);
       } catch (Exception e) {
         System.out.println(PROBLEM_PARSING);
       }

@@ -18,12 +18,10 @@ public class Vocabulary extends Item {
    * @param kana the kana
    * @param meaning the meaning(s)
    * @param level the level
-   * @param unlockedDate the date at which this item was unlocked
-   * @param percentage the percentage the item has been reviewed correctly
    */
   public Vocabulary(String type, String character, 
-          String kana, String[] meaning, int level, Long unlockedDate, Integer percentage) {
-    super(type, character, meaning, level, unlockedDate, percentage);
+          String kana, String[] meaning, int level) {
+    super(type, character, meaning, level);
     this.kana = kana;
   }
 

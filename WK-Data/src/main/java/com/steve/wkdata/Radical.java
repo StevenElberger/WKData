@@ -18,12 +18,10 @@ public class Radical extends Item {
    * @param meaning the meaning(s)
    * @param image the image, if applicable
    * @param level the level at which unlocked
-   * @param unlockedDate the date at which unlocked
-   * @param percentage the percentage the item has been reviewed correctly
    */
   public Radical(String type, String character, String[] meaning, 
-                      String image, int level, Long unlockedDate, Integer percentage) {
-    super(type, character, meaning, level, unlockedDate, percentage);
+                      String image, int level) {
+    super(type, character, meaning, level);
     this.image = image;
   }
 

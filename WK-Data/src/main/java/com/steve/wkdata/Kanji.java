@@ -39,9 +39,8 @@ public class Kanji extends Item {
   public Kanji(String type, String character, 
           String[] meaning, String onyomi, 
           String[] kunyomi, String nanori, 
-          String importantReading, int level, 
-          Long unlockedDate, Integer percentage) {
-    super(type, character, meaning, level, unlockedDate, percentage);
+          String importantReading, int level) {
+    super(type, character, meaning, level);
     this.onyomi = onyomi;
     this.kunyomi = kunyomi;
     this.nanori = nanori;
